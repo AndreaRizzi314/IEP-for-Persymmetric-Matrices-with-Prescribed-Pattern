@@ -1,0 +1,173 @@
+% Compile with pdfLaTeX. This is an original short draft for the project.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{example}{Example}
+
+\title{Persymmetric Matrices: Structure and Small Examples}
+\author{}
+\date{Working draft, September 2026}
+
+\begin{document}
+\maketitle
+
+\section{Definition and first properties}
+
+Let $J_n$ be the $n\times n$ reversal matrix: its $(i,j)$ entry is $1$ when
+$i+j=n+1$ and $0$ otherwise. Thus $J_n^T=J_n$ and $J_n^2=I_n$. A real matrix
+$A=(a_{ij})$ is \emph{persymmetric} when reflection across its anti-diagonal
+leaves its entries unchanged. In indices, this means
+\begin{equation}\label{eq:persymmetry}
+ a_{ij}=a_{n+1-j,n+1-i},\qquad 1\leq i,j\leq n.
+\end{equation}
+Equivalently, $A=J_nA^TJ_n$. Multiplying this identity by $J_n$ on the left
+shows that $J_nA$ is an ordinary symmetric matrix. Conversely, every symmetric
+matrix $S$ gives a persymmetric matrix $J_nS$. Hence the space of real
+persymmetric $n\times n$ matrices has dimension $n(n+1)/2$.
+
+\begin{example}
+For $n=3$, the matrix from the project brief~\cite{project-brief}
+\[
+ A=\begin{pmatrix}1&2&3\\4&5&2\\6&4&1\end{pmatrix}
+\]
+is persymmetric: the entries $a_{11}$ and $a_{33}$ agree, as do $a_{12}$ and
+$a_{23}$, and $a_{21}$ and $a_{32}$. The three entries on the anti-diagonal
+are fixed by the reflection and need not equal one another. This example is
+not symmetric, since $a_{12}\ne a_{21}$.
+\end{example}
+
+Persymmetry alone does not force real eigenvalues. The $2\times2$ analysis
+below supplies an explicit counterexample. A \emph{bisymmetric} matrix has the
+additional requirement $A=A^T$; the terminology and the nonnegative inverse
+eigenvalue problem provide background in Julio and Soto~\cite{julio-soto}.
+Our project instead permits prescribed positive, negative and zero entries,
+as set out in the project brief~\cite{project-brief}.
+
+\section{Patterns and the two-dimensional case}
+
+The sketches use $\star$ for a required nonzero entry, $\times$ for an entry
+whose value is unrestricted, and $+$, $-$ and $0$ for a positive, negative and
+zero entry respectively. Any prescribed pattern must respect
+\eqref{eq:persymmetry}; reflected positions carry the same requirement.
+For $2\times2$ matrices, the diagonal positions are paired, whereas each
+anti-diagonal position is fixed separately. The three sketched families can
+therefore be written as
+\[
+ \mathcal F_1:\begin{pmatrix}\star&\times\\\times&\star\end{pmatrix},
+ \qquad
+ \mathcal F_2:\begin{pmatrix}\star&0\\\star&\star\end{pmatrix},
+ \qquad
+ \mathcal F_3:\begin{pmatrix}+&0\\-&+\end{pmatrix}.
+\]
+In each display, the two diagonal symbols describe the \emph{same} entry
+value, because persymmetry requires $a_{11}=a_{22}$. The third family is a
+sign-restricted part of the second. For instance,
+\[
+ \begin{pmatrix}1&2\\-3&1\end{pmatrix}\in\mathcal F_1,
+ \qquad
+ \begin{pmatrix}2&0\\3&2\end{pmatrix}\in\mathcal F_2,
+ \qquad
+ \begin{pmatrix}2&0\\-3&2\end{pmatrix}\in\mathcal F_3.
+\]
+
+Every real persymmetric $2\times2$ matrix has the form
+\[
+ A_2=\begin{pmatrix}a&b\\c&a\end{pmatrix}.
+\]
+Writing the characteristic polynomial in the monic convention gives
+\begin{equation}\label{eq:two-by-two}
+ \chi_{A_2}(x)=\det(xI_2-A_2)=(x-a)^2-bc,
+ \qquad \lambda_{1,2}=a\pm\sqrt{bc}.
+\end{equation}
+The product $bc$, rather than the signs of $b$ and $c$ separately, determines
+the spectral case:
+\begin{itemize}
+ \item If $bc>0$, there are two distinct real eigenvalues. For example,
+ $\left(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\right)$ has spectrum
+ $\{0,2\}$.
+ \item If $bc=0$, $a$ is a repeated eigenvalue. For example,
+ $\left(\begin{smallmatrix}2&0\\-3&2\end{smallmatrix}\right)$ has
+ characteristic polynomial $(x-2)^2$. It is not diagonalizable, since the
+ off-diagonal entry is nonzero.
+ \item If $bc<0$, the eigenvalues form a nonreal conjugate pair. For example,
+ $\left(\begin{smallmatrix}1&1\\-1&1\end{smallmatrix}\right)$ has
+ eigenvalues $1\pm i$.
+\end{itemize}
+For a directed graph formed from the nonzero entries, $b$ and $c$ supply the
+two opposite directed edges. That graph records whether the edges exist, but
+their signs are also needed to distinguish the first and third cases above.
+
+\section{The three-dimensional nilpotent question}
+
+The general real persymmetric $3\times3$ matrix is
+\begin{equation}\label{eq:three-by-three}
+ A_3=\begin{pmatrix}a&b&d\\c&e&b\\f&c&a\end{pmatrix}.
+\end{equation}
+Expanding $\det(xI_3-A_3)$ yields
+\begin{align}\label{eq:three-charpoly}
+ \chi_{A_3}(x)
+ &=x^3-(2a+e)x^2+(a^2+2ae-2bc-df)x-\det A_3,\\
+ \det A_3&=a^2e-2abc+b^2f+c^2d-def.\nonumber
+\end{align}
+Consequently, $\chi_{A_3}(x)=x^3$ exactly when
+\begin{equation}\label{eq:nilpotent-conditions}
+ e=-2a,\qquad 3a^2+2bc+df=0,\qquad
+ -2a^3-2abc+b^2f+c^2d+2adf=0.
+\end{equation}
+These are three coefficient equations, not just the trace condition
+$e=-2a$. By the Cayley--Hamilton theorem they are also equivalent to
+$A_3^3=0$.
+
+\begin{example}
+The upper shift
+\[
+ U=\begin{pmatrix}0&1&0\\0&0&1\\0&0&0\end{pmatrix}
+\]
+is persymmetric and has $\chi_U(x)=x^3$. Here $U^2\ne0$ but $U^3=0$.
+This is a nonnegative example.
+\end{example}
+
+\begin{example}
+The signed matrix
+\[
+ N=\begin{pmatrix}0&1&1\\2&0&1\\-4&2&0\end{pmatrix}
+\]
+is also persymmetric and satisfies $\chi_N(x)=x^3$, although its graph has
+directed cycles. Its positive and negative weights cancel in the coefficients
+of the characteristic polynomial. Direct multiplication gives $N^2\ne0$ and
+$N^3=0$. This illustrates why the signed-pattern problem differs from the
+nonnegative problem.
+\end{example}
+
+The cancellation can be read from the graph. When $a=e=0$, the coefficient
+of $x$ is minus the two-step cycle sum $2bc+df$, while the determinant is the
+sum $b^2f+c^2d$ of the two directed three-step cycle weights. For $N$, these
+quantities are $2(1)(2)+(1)(-4)=0$ and
+$(1)^2(-4)+(2)^2(1)=0$. Thus the graph records the cycles, but the signed
+weights determine whether their contributions cancel.
+
+If $A_3$ is entrywise nonnegative and $\chi_{A_3}(x)=x^3$, the first equation
+in \eqref{eq:nilpotent-conditions} forces $a=e=0$: a sum of nonnegative
+diagonal entries can vanish only when each one vanishes. The signed example
+above does not satisfy entrywise nonnegativity. The accompanying Mathematica
+notebook checks \eqref{eq:three-charpoly}, derives
+\eqref{eq:nilpotent-conditions}, and tests these examples symbolically.
+
+\begin{thebibliography}{9}
+\bibitem{julio-soto}
+A. I. Julio and R. L. Soto,
+``Persymmetric and bisymmetric nonnegative inverse eigenvalue problem,''
+\emph{Linear Algebra and its Applications} \textbf{469} (2015), 130--152.
+\href{https://doi.org/10.1016/j.laa.2014.11.025}{doi:10.1016/j.laa.2014.11.025}.
+
+\bibitem{project-brief}
+H. \v{S}migoc,
+``Inverse Eigenvalue Problem for Persymmetric Matrices with Prescribed Pattern,''
+project brief supplied for the final-year project (2026).
+\end{thebibliography}
+
+\end{document}

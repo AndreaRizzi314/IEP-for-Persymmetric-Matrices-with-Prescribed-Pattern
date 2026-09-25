@@ -1,0 +1,57 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+(* Wolfram Notebook File *)
+
+Notebook[{
+ Cell["Persymmetric 3 x 3 matrices", "Title"],
+ Cell["Symbolic structure, characteristic polynomial, nilpotency, and signed patterns", "Subtitle"],
+ Cell["This notebook accompanies the short LaTeX draft. Evaluate the input cells from top to bottom. All examples use exact integers or rational numbers, so symbolic results are exact.", "Text"],
+
+ Cell["1. The general persymmetric matrix", "Section"],
+ Cell["The reversal matrix J reflects a matrix across its anti-diagonal. For a 3 x 3 persymmetric matrix, entries a11 and a33 match, as do a12 with a23 and a21 with a32. The anti-diagonal entries d, e, f are fixed by the reflection and are independent.", "Text"],
+ Cell[BoxData["ClearAll[\"Global`*\"]; j3 = Reverse[IdentityMatrix[3]]; a3 = {{a, b, d}, {c, e, b}, {f, c, a}}; {MatrixForm[j3], MatrixForm[a3]}"], "Input"],
+ Cell[BoxData["{Simplify[a3 == j3.Transpose[a3].j3], Simplify[j3.a3 == Transpose[j3.a3]]}"], "Input"],
+ Cell["Both results should be True. The second check shows that J A is symmetric. In particular, a persymmetric 3 x 3 matrix has six independent real parameters.", "Text"],
+
+ Cell["2. Characteristic polynomial", "Section"],
+ Cell["We use the monic convention chi(x) = det(x I - A), matching the LaTeX report. Wolfram's CharacteristicPolynomial[A,x] uses det(A - x I); in odd dimension it is the negative of chi(x).", "Text"],
+ Cell[BoxData["chi = Expand[Det[x IdentityMatrix[3] - a3]]; chi"], "Input"],
+ Cell[BoxData["detA = Factor[Det[a3]]; expected = x^3 - (2 a + e) x^2 + (a^2 + 2 a e - 2 b c - d f) x - detA; {detA, FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]]}"], "Input"],
+ Cell["The last two checks should both return True. The determinant is a^2 e - 2 a b c + b^2 f + c^2 d - d e f.", "Text"],
+
+ Cell["3. Exactly when is chi(x) = x^3?", "Section"],
+ Cell["All three lower coefficients must vanish. The x^2 coefficient sets the trace to zero; it does not by itself make the matrix nilpotent.", "Text"],
+ Cell[BoxData["coefficientEquations = Table[Coefficient[chi, x, k] == 0, {k, 0, 2}]; coefficientEquations // TableForm"], "Input"],
+ Cell[BoxData["traceRule = e -> -2 a; reducedPolynomial = Expand[chi /. traceRule]; reducedPolynomial"], "Input"],
+ Cell[BoxData["nilpotentConditions = {e == -2 a, 3 a^2 + 2 b c + d f == 0, -2 a^3 - 2 a b c + b^2 f + c^2 d + 2 a d f == 0}; nilpotentConditions // TableForm"], "Input"],
+ Cell["These conditions are necessary and sufficient because they make every coefficient below x^3 vanish. Cayley-Hamilton then gives A^3 = 0. Conversely, if A^3 = 0, every eigenvalue is zero, so chi(x) = x^3.", "Text"],
+ Cell["Using the second condition to eliminate d f, the last condition can also be written b^2 f + c^2 d = 8 a^3 + 6 a b c. This rearrangement is useful when searching for examples.", "Text"],
+
+ Cell["4. A nonnegative example", "Section"],
+ Cell["The upper shift has a directed chain of length two. Its square is nonzero and its cube is zero, so its nilpotency index is three.", "Text"],
+ Cell[BoxData["upperShift = {{0, 1, 0}, {0, 0, 1}, {0, 0, 0}}; {MatrixForm[upperShift], Simplify[upperShift == j3.Transpose[upperShift].j3], Expand[Det[x IdentityMatrix[3] - upperShift]], MatrixForm[MatrixPower[upperShift, 2]], MatrixForm[MatrixPower[upperShift, 3]]}"], "Input"],
+
+ Cell["5. Signed cycles can cancel", "Section"],
+ Cell["This example has both positive and negative entries. Its directed nonzero pattern has cycles, yet all nonleading characteristic coefficients cancel. That possibility distinguishes signed patterns from the nonnegative setting.", "Text"],
+ Cell[BoxData["mixedCycles = {{0, 1, 1}, {2, 0, 1}, {-4, 2, 0}}; {MatrixForm[mixedCycles], Simplify[mixedCycles == j3.Transpose[mixedCycles].j3], Expand[Det[x IdentityMatrix[3] - mixedCycles]], MatrixForm[MatrixPower[mixedCycles, 2]], MatrixForm[MatrixPower[mixedCycles, 3]]}"], "Input"],
+ Cell[BoxData["signPattern = Map[Which[# > 0, \"+\", # < 0, \"-\", True, \"0\"] &, mixedCycles, {2}]; Grid[signPattern, Frame -> All]"], "Input"],
+ Cell[BoxData["adjacency = Map[Boole[# != 0] &, mixedCycles, {2}]; AdjacencyGraph[adjacency, DirectedEdges -> True, VertexLabels -> \"Name\"]"], "Input"],
+
+ Cell["6. Nonzero diagonal and a smaller nilpotency index", "Section"],
+ Cell["A signed nilpotent matrix can even have a nonzero diagonal. The next example has a = 1 and e = -2. It has rank one and square zero, so its nilpotency index is two, although its characteristic polynomial is still x^3.", "Text"],
+ Cell[BoxData["rankOneExample = {{1, 1, -1/2}, {-2, -2, 1}, {-2, -2, 1}}; {MatrixForm[rankOneExample], Simplify[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - rankOneExample]], MatrixRank[rankOneExample], MatrixForm[MatrixPower[rankOneExample, 2]]}"], "Input"],
+
+ Cell["7. Reality of eigenvalues is not automatic", "Section"],
+ Cell["Persymmetry by itself does not imply a real spectrum. This real persymmetric example has one real eigenvalue and a nonreal conjugate pair.", "Text"],
+ Cell[BoxData["complexExample = {{0, 1, 0}, {-1, 0, 1}, {0, -1, 0}}; {Simplify[complexExample == j3.Transpose[complexExample].j3], Factor[Det[x IdentityMatrix[3] - complexExample]], Eigenvalues[complexExample]}"], "Input"],
+
+ Cell["8. Nonnegative specialization and a 2 x 2 bridge", "Section"],
+ Cell["If all entries of A are nonnegative and chi(x) = x^3, then 2a + e = 0 forces a = e = 0. The x coefficient then forces b c = d f = 0, since both products are nonnegative. The determinant condition also forces b^2 f = c^2 d = 0. These restrictions do not apply to signed matrices.", "Text"],
+ Cell[BoxData["a2 = {{a, b}, {c, a}}; Factor[Det[x IdentityMatrix[2] - a2]]"], "Input"],
+ Cell["The 2 x 2 answer is (x - a)^2 - b c. For b c > 0 the eigenvalues are distinct and real; for b c = 0 they coincide; for b c < 0 they form a nonreal conjugate pair.", "Text"],
+
+ Cell["9. Reproducibility checks", "Section"],
+ Cell["Evaluating the following cell should give True. It checks the symbolic expansion, persymmetry, and all three nilpotent examples.", "Text"],
+ Cell[BoxData["allChecks = {FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]], TrueQ[upperShift == j3.Transpose[upperShift].j3], TrueQ[mixedCycles == j3.Transpose[mixedCycles].j3], TrueQ[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - upperShift]] === x^3, Expand[Det[x IdentityMatrix[3] - mixedCycles]] === x^3, Expand[Det[x IdentityMatrix[3] - rankOneExample]] === x^3, MatrixPower[upperShift, 3] == ConstantArray[0, {3, 3}], MatrixPower[mixedCycles, 3] == ConstantArray[0, {3, 3}], MatrixPower[rankOneExample, 2] == ConstantArray[0, {3, 3}]}; And @@ allChecks"], "Input"],
+
+ Cell["Sources: H. Šmigoc, project brief supplied for this project (2026); A. I. Julio and R. L. Soto, Linear Algebra and its Applications 469 (2015), 130-152, doi:10.1016/j.laa.2014.11.025. The derivations and worked examples in this notebook were prepared for this draft.", "Text"]
+}, WindowTitle -> "Persymmetric 3 x 3 matrices", StyleDefinitions -> "Default.nb"]
