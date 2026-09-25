@@ -4,7 +4,7 @@
 Notebook[{
  Cell["Persymmetric 3 x 3 matrices", "Title"],
  Cell["Symbolic structure, characteristic polynomial, nilpotency, and signed patterns", "Subtitle"],
- Cell["This notebook accompanies the short LaTeX draft. Evaluate the input cells from top to bottom. All examples use exact integers or rational numbers, so symbolic results are exact.", "Text"],
+ Cell["Evaluate the input cells from top to bottom. All examples use exact integers or rational numbers, so symbolic results are exact.", "Text"],
 
  Cell["1. The general persymmetric matrix", "Section"],
  Cell["The reversal matrix J reflects a matrix across its anti-diagonal. For a 3 x 3 persymmetric matrix, entries a11 and a33 match, as do a12 with a23 and a21 with a32. The anti-diagonal entries d, e, f are fixed by the reflection and are independent.", "Text"],
@@ -13,7 +13,7 @@ Notebook[{
  Cell["Both results should be True. The second check shows that J A is symmetric. In particular, a persymmetric 3 x 3 matrix has six independent real parameters.", "Text"],
 
  Cell["2. Characteristic polynomial", "Section"],
- Cell["We use the monic convention chi(x) = det(x I - A), matching the LaTeX report. Wolfram's CharacteristicPolynomial[A,x] uses det(A - x I); in odd dimension it is the negative of chi(x).", "Text"],
+ Cell["We use the monic convention chi(x) = det(x I - A). Wolfram's CharacteristicPolynomial[A,x] uses det(A - x I); in odd dimension it is the negative of chi(x).", "Text"],
  Cell[BoxData["chi = Expand[Det[x IdentityMatrix[3] - a3]]; chi"], "Input"],
  Cell[BoxData["detA = Factor[Det[a3]]; expected = x^3 - (2 a + e) x^2 + (a^2 + 2 a e - 2 b c - d f) x - detA; {detA, FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]]}"], "Input"],
  Cell["The last two checks should both return True. The determinant is a^2 e - 2 a b c + b^2 f + c^2 d - d e f.", "Text"],
@@ -51,7 +51,5 @@ Notebook[{
 
  Cell["9. Reproducibility checks", "Section"],
  Cell["Evaluating the following cell should give True. It checks the symbolic expansion, persymmetry, and all three nilpotent examples.", "Text"],
- Cell[BoxData["allChecks = {FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]], TrueQ[upperShift == j3.Transpose[upperShift].j3], TrueQ[mixedCycles == j3.Transpose[mixedCycles].j3], TrueQ[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - upperShift]] === x^3, Expand[Det[x IdentityMatrix[3] - mixedCycles]] === x^3, Expand[Det[x IdentityMatrix[3] - rankOneExample]] === x^3, MatrixPower[upperShift, 3] == ConstantArray[0, {3, 3}], MatrixPower[mixedCycles, 3] == ConstantArray[0, {3, 3}], MatrixPower[rankOneExample, 2] == ConstantArray[0, {3, 3}]}; And @@ allChecks"], "Input"],
-
- Cell["Sources: H. Šmigoc, project brief supplied for this project (2026); A. I. Julio and R. L. Soto, Linear Algebra and its Applications 469 (2015), 130-152, doi:10.1016/j.laa.2014.11.025. The derivations and worked examples in this notebook were prepared for this draft.", "Text"]
+ Cell[BoxData["allChecks = {FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]], TrueQ[upperShift == j3.Transpose[upperShift].j3], TrueQ[mixedCycles == j3.Transpose[mixedCycles].j3], TrueQ[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - upperShift]] === x^3, Expand[Det[x IdentityMatrix[3] - mixedCycles]] === x^3, Expand[Det[x IdentityMatrix[3] - rankOneExample]] === x^3, MatrixPower[upperShift, 3] == ConstantArray[0, {3, 3}], MatrixPower[mixedCycles, 3] == ConstantArray[0, {3, 3}], MatrixPower[rankOneExample, 2] == ConstantArray[0, {3, 3}]}; And @@ allChecks"], "Input"]
 }, WindowTitle -> "Persymmetric 3 x 3 matrices", StyleDefinitions -> "Default.nb"]

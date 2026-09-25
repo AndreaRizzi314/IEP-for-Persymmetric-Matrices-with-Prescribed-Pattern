@@ -11,6 +11,6 @@ Working materials for a final-year project on persymmetric matrices, sign patter
 
 Compile the LaTeX draft with **pdfLaTeX** (for example, upload the `.tex` file to Overleaf and select pdfLaTeX). A local TeX compiler was unavailable when the draft was created, so a compiled PDF is not included yet.
 
-Open the `.nb` file in Wolfram/Mathematica and evaluate its input cells from top to bottom. Mathematica defines `CharacteristicPolynomial[A, x]` as `det(A - x I)`; the notebook uses the monic convention `det(x I - A)` for comparison with the report. In a fresh kernel session, all 15 input cells executed and the final verification cell returned `True`.
+Open the `.nb` file in Wolfram/Mathematica and evaluate its input cells from top to bottom. Mathematica defines `CharacteristicPolynomial[A, x]` as `det(A - x I)`; the notebook uses the monic convention `det(x I - A)`. In a fresh kernel session, all 15 input cells executed and the final verification cell returned `True`.
 
 The draft distinguishes this project's signed-pattern problem from the **nonnegative** persymmetric inverse eigenvalue problem discussed by A. I. Julio and R. L. Soto, *Linear Algebra and its Applications* **469** (2015), 130–152, [doi:10.1016/j.laa.2014.11.025](https://doi.org/10.1016/j.laa.2014.11.025).
