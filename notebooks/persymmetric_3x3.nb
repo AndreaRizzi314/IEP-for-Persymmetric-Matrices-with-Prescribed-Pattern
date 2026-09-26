@@ -1,55 +1,1248 @@
 (* Content-type: application/vnd.wolfram.mathematica *)
-(* Wolfram Notebook File *)
 
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 15.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     47713,       1240]
+NotebookOptionsPosition[     39232,       1099]
+NotebookOutlinePosition[     39675,       1116]
+CellTagsIndexPosition[     39632,       1113]
+WindowTitle->Persymmetric 3 x 3 matrices
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
 Notebook[{
- Cell["Persymmetric 3 x 3 matrices", "Title"],
- Cell["Symbolic structure, characteristic polynomial, nilpotency, and signed patterns", "Subtitle"],
- Cell["Evaluate the input cells from top to bottom. All examples use exact integers or rational numbers, so symbolic results are exact.", "Text"],
 
- Cell["1. The general persymmetric matrix", "Section"],
- Cell["The reversal matrix J reflects a matrix across its anti-diagonal. For a 3 x 3 persymmetric matrix, entries a11 and a33 match, as do a12 with a23 and a21 with a32. The anti-diagonal entries d, e, f are fixed by the reflection and are independent.", "Text"],
- Cell[BoxData["ClearAll[\"Global`*\"]; j3 = Reverse[IdentityMatrix[3]]; a3 = {{a, b, d}, {c, e, b}, {f, c, a}}; {MatrixForm[j3], MatrixForm[a3]}"], "Input"],
- Cell[BoxData["{Simplify[a3 == j3.Transpose[a3].j3], Simplify[j3.a3 == Transpose[j3.a3]]}"], "Input"],
- Cell["Both results should be True. The second check shows that J A is symmetric. In particular, a persymmetric 3 x 3 matrix has six independent real parameters.", "Text"],
+Cell[CellGroupData[{
+Cell["Persymmetric 3 \[Times] 3 matrices", "Title",ExpressionUUID->"1a23e6f7-cfb2-be45-8bd2-9f70cbece0a4"],
 
- Cell["2. Characteristic polynomial", "Section"],
- Cell["We use the monic convention chi(x) = det(x I - A). Wolfram's CharacteristicPolynomial[A,x] uses det(A - x I); in odd dimension it is the negative of chi(x).", "Text"],
- Cell[BoxData["chi = Expand[Det[x IdentityMatrix[3] - a3]]; chi"], "Input"],
- Cell[BoxData["detA = Factor[Det[a3]]; expected = x^3 - (2 a + e) x^2 + (a^2 + 2 a e - 2 b c - d f) x - detA; {detA, FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]]}"], "Input"],
- Cell["The last two checks should both return True. The determinant is a^2 e - 2 a b c + b^2 f + c^2 d - d e f.", "Text"],
+Cell["\<\
+Characteristic polynomials, nilpotency, and prescribed patterns\
+\>", "Subtitle",ExpressionUUID->"67f7b603-c1ee-b444-a49f-b42b1c8498ad"],
 
- Cell["3. Exactly when is chi(x) = x^3?", "Section"],
- Cell["All three lower coefficients must vanish. The x^2 coefficient sets the trace to zero; it does not by itself make the matrix nilpotent.", "Text"],
- Cell[BoxData["coefficientEquations = Table[Coefficient[chi, x, k] == 0, {k, 0, 2}]; coefficientEquations // TableForm"], "Input"],
- Cell[BoxData["traceRule = e -> -2 a; reducedPolynomial = Expand[chi /. traceRule]; reducedPolynomial"], "Input"],
- Cell[BoxData["nilpotentConditions = {e == -2 a, 3 a^2 + 2 b c + d f == 0, -2 a^3 - 2 a b c + b^2 f + c^2 d + 2 a d f == 0}; nilpotentConditions // TableForm"], "Input"],
- Cell["These conditions are necessary and sufficient because they make every coefficient below x^3 vanish. Cayley-Hamilton then gives A^3 = 0. Conversely, if A^3 = 0, every eigenvalue is zero, so chi(x) = x^3.", "Text"],
- Cell["Using the second condition to eliminate d f, the last condition can also be written b^2 f + c^2 d = 8 a^3 + 6 a b c. This rearrangement is useful when searching for examples.", "Text"],
+Cell["\<\
+All parameters are real unless stated otherwise. The input cells are \
+evaluated sequentially, using exact arithmetic throughout.\
+\>", "Text",ExpressionUUID->"2a963af7-5aba-624b-84e1-689f9d64a09e"],
 
- Cell["4. A nonnegative example", "Section"],
- Cell["The upper shift has a directed chain of length two. Its square is nonzero and its cube is zero, so its nilpotency index is three.", "Text"],
- Cell[BoxData["upperShift = {{0, 1, 0}, {0, 0, 1}, {0, 0, 0}}; {MatrixForm[upperShift], Simplify[upperShift == j3.Transpose[upperShift].j3], Expand[Det[x IdentityMatrix[3] - upperShift]], MatrixForm[MatrixPower[upperShift, 2]], MatrixForm[MatrixPower[upperShift, 3]]}"], "Input"],
+Cell[CellGroupData[{
 
- Cell["5. Signed cycles can cancel", "Section"],
- Cell["This example has both positive and negative entries. Its directed nonzero pattern has cycles, yet all nonleading characteristic coefficients cancel. That possibility distinguishes signed patterns from the nonnegative setting.", "Text"],
- Cell[BoxData["mixedCycles = {{0, 1, 1}, {2, 0, 1}, {-4, 2, 0}}; {MatrixForm[mixedCycles], Simplify[mixedCycles == j3.Transpose[mixedCycles].j3], Expand[Det[x IdentityMatrix[3] - mixedCycles]], MatrixForm[MatrixPower[mixedCycles, 2]], MatrixForm[MatrixPower[mixedCycles, 3]]}"], "Input"],
- Cell[BoxData["signPattern = Map[Which[# > 0, \"+\", # < 0, \"-\", True, \"0\"] &, mixedCycles, {2}]; Grid[signPattern, Frame -> All]"], "Input"],
- Cell[BoxData["adjacency = Map[Boole[# != 0] &, mixedCycles, {2}]; AdjacencyGraph[adjacency, DirectedEdges -> True, VertexLabels -> \"Name\"]"], "Input"],
+Cell["1. The general persymmetric matrix", "Section",ExpressionUUID->"917e3af2-1be2-184c-be48-f7155335f40e"],
 
- Cell["6. Nonzero diagonal and a smaller nilpotency index", "Section"],
- Cell["A signed nilpotent matrix can even have a nonzero diagonal. The next example has a = 1 and e = -2. It has rank one and square zero, so its nilpotency index is two, although its characteristic polynomial is still x^3.", "Text"],
- Cell[BoxData["rankOneExample = {{1, 1, -1/2}, {-2, -2, 1}, {-2, -2, 1}}; {MatrixForm[rankOneExample], Simplify[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - rankOneExample]], MatrixRank[rankOneExample], MatrixForm[MatrixPower[rankOneExample, 2]]}"], "Input"],
+Cell["\<\
+Let J denote the reversal matrix of order 3. Since J = J\:1d40 = J\:207b\.b9, \
+the persymmetry condition A = JA\:1d40J is equivalent to the symmetry of JA. \
+The general form below has six independent real parameters; the anti-diagonal \
+entries d, e and f are unconstrained by the reflection.\
+\>", "Text",ExpressionUUID->"e6ba781a-89fb-344d-b17f-c89bd3e4254f"],
 
- Cell["7. Reality of eigenvalues is not automatic", "Section"],
- Cell["Persymmetry by itself does not imply a real spectrum. This real persymmetric example has one real eigenvalue and a nonreal conjugate pair.", "Text"],
- Cell[BoxData["complexExample = {{0, 1, 0}, {-1, 0, 1}, {0, -1, 0}}; {Simplify[complexExample == j3.Transpose[complexExample].j3], Factor[Det[x IdentityMatrix[3] - complexExample]], Eigenvalues[complexExample]}"], "Input"],
+Cell[CellGroupData[{
 
- Cell["8. Nonnegative specialization and a 2 x 2 bridge", "Section"],
- Cell["If all entries of A are nonnegative and chi(x) = x^3, then 2a + e = 0 forces a = e = 0. The x coefficient then forces b c = d f = 0, since both products are nonnegative. The determinant condition also forces b^2 f = c^2 d = 0. These restrictions do not apply to signed matrices.", "Text"],
- Cell[BoxData["a2 = {{a, b}, {c, a}}; Factor[Det[x IdentityMatrix[2] - a2]]"], "Input"],
- Cell["The 2 x 2 answer is (x - a)^2 - b c. For b c > 0 the eigenvalues are distinct and real; for b c = 0 they coincide; for b c < 0 they form a nonreal conjugate pair.", "Text"],
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], ";", " ", 
+  RowBox[{"j3", " ", "=", " ", 
+   RowBox[{"Reverse", "[", 
+    RowBox[{"IdentityMatrix", "[", "3", "]"}], "]"}]}], ";", " ", 
+  RowBox[{"a3", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", " ", "b", ",", " ", "d"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"c", ",", " ", "e", ",", " ", "b"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"f", ",", " ", "c", ",", " ", "a"}], "}"}]}], "}"}]}], ";", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "j3", "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", "a3", "]"}]}], "}"}]}]], "Input",
+ CellLabel->"In[61]:=",ExpressionUUID->"df981a7d-cbc9-e246-af20-4164717df7fe"],
 
- Cell["9. Reproducibility checks", "Section"],
- Cell["Evaluating the following cell should give True. It checks the symbolic expansion, persymmetry, and all three nilpotent examples.", "Text"],
- Cell[BoxData["allChecks = {FullSimplify[chi == expected], FullSimplify[chi == -CharacteristicPolynomial[a3, x]], TrueQ[upperShift == j3.Transpose[upperShift].j3], TrueQ[mixedCycles == j3.Transpose[mixedCycles].j3], TrueQ[rankOneExample == j3.Transpose[rankOneExample].j3], Expand[Det[x IdentityMatrix[3] - upperShift]] === x^3, Expand[Det[x IdentityMatrix[3] - mixedCycles]] === x^3, Expand[Det[x IdentityMatrix[3] - rankOneExample]] === x^3, MatrixPower[upperShift, 3] == ConstantArray[0, {3, 3}], MatrixPower[mixedCycles, 3] == ConstantArray[0, {3, 3}], MatrixPower[rankOneExample, 2] == ConstantArray[0, {3, 3}]}; And @@ allChecks"], "Input"]
-}, WindowTitle -> "Persymmetric 3 x 3 matrices", StyleDefinitions -> "Default.nb"]
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "1"},
+       {"0", "1", "0"},
+       {"1", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"a", "b", "d"},
+       {"c", "e", "b"},
+       {"f", "c", "a"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{3.999412264909231*^9, 3.9994337800526505`*^9},
+ CellLabel->"Out[61]=",ExpressionUUID->"51362344-5fbf-554c-9f3a-7d00f83e0646"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"Simplify", "[", 
+    RowBox[{"a3", " ", "==", " ", 
+     RowBox[{"j3", ".", 
+      RowBox[{"Transpose", "[", "a3", "]"}], ".", "j3"}]}], "]"}], ",", " ", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{
+     RowBox[{"j3", ".", "a3"}], " ", "==", " ", 
+     RowBox[{"Transpose", "[", 
+      RowBox[{"j3", ".", "a3"}], "]"}]}], "]"}]}], "}"}]], "Input",
+ CellLabel->"In[62]:=",ExpressionUUID->"8d2053eb-001f-6d46-afac-ac5fa470b737"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", "True"}], "}"}]], "Output",
+ CellChangeTimes->{3.999412265039192*^9, 3.999433780077652*^9},
+ CellLabel->"Out[62]=",ExpressionUUID->"15d0b2a0-6f6f-f74c-820f-0bb0e4833b1c"]
+}, Open  ]],
+
+Cell["\<\
+The two identities verify persymmetry and its equivalent formulation through \
+JA. Thus the real persymmetric matrices of order 3 form a six-dimensional \
+linear subspace.\
+\>", "Text",ExpressionUUID->"d3ca4893-e656-7f4e-8cc5-4ac16864d353"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2. Characteristic polynomial", "Section",ExpressionUUID->"82cd4f98-13c2-e64e-92d9-d11cca88662d"],
+
+Cell["\<\
+Set \[Chi](x) = det(xI - A). Mathematica's CharacteristicPolynomial[A, x] \
+uses det(A - xI), so its output is -\[Chi](x) in dimension 3. The final \
+equality below checks this sign convention.\
+\>", "Text",ExpressionUUID->"78d4e409-2b16-5141-a7d8-f01bc429fbdc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"chi", " ", "=", " ", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"Det", "[", 
+     RowBox[{
+      RowBox[{"x", " ", 
+       RowBox[{"IdentityMatrix", "[", "3", "]"}]}], " ", "-", " ", "a3"}], 
+     "]"}], "]"}]}], ";", " ", "chi"}]], "Input",
+ CellLabel->"In[63]:=",ExpressionUUID->"e487e725-542f-0148-91dd-a1bdcd706c03"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"2", " ", "a", " ", "b", " ", "c"}], "-", 
+  RowBox[{
+   SuperscriptBox["c", "2"], " ", "d"}], "-", 
+  RowBox[{
+   SuperscriptBox["a", "2"], " ", "e"}], "-", 
+  RowBox[{
+   SuperscriptBox["b", "2"], " ", "f"}], "+", 
+  RowBox[{"d", " ", "e", " ", "f"}], "+", 
+  RowBox[{
+   SuperscriptBox["a", "2"], " ", "x"}], "-", 
+  RowBox[{"2", " ", "b", " ", "c", " ", "x"}], "+", 
+  RowBox[{"2", " ", "a", " ", "e", " ", "x"}], "-", 
+  RowBox[{"d", " ", "f", " ", "x"}], "-", 
+  RowBox[{"2", " ", "a", " ", 
+   SuperscriptBox["x", "2"]}], "-", 
+  RowBox[{"e", " ", 
+   SuperscriptBox["x", "2"]}], "+", 
+  SuperscriptBox["x", "3"]}]], "Output",
+ CellChangeTimes->{3.9994122650421925`*^9, 3.999433780101652*^9},
+ CellLabel->"Out[63]=",ExpressionUUID->"31242fd8-8072-fb44-9aee-1e5184ef69d6"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"detA", " ", "=", " ", 
+   RowBox[{"Factor", "[", 
+    RowBox[{"Det", "[", "a3", "]"}], "]"}]}], ";", " ", 
+  RowBox[{"expected", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"x", "^", "3"}], " ", "-", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", " ", "a"}], " ", "+", " ", "e"}], ")"}], " ", 
+     RowBox[{"x", "^", "2"}]}], " ", "+", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"a", "^", "2"}], " ", "+", " ", 
+       RowBox[{"2", " ", "a", " ", "e"}], " ", "-", " ", 
+       RowBox[{"2", " ", "b", " ", "c"}], " ", "-", " ", 
+       RowBox[{"d", " ", "f"}]}], ")"}], " ", "x"}], " ", "-", " ", 
+    "detA"}]}], ";", " ", 
+  RowBox[{"{", 
+   RowBox[{"detA", ",", " ", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{"chi", " ", "==", " ", "expected"}], "]"}], ",", " ", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{"chi", " ", "==", " ", 
+      RowBox[{"-", 
+       RowBox[{"CharacteristicPolynomial", "[", 
+        RowBox[{"a3", ",", " ", "x"}], "]"}]}]}], "]"}]}], "}"}]}]], "Input",
+ CellLabel->"In[64]:=",ExpressionUUID->"a136f298-1140-d841-84b1-79e2ce408593"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "2"}], " ", "a", " ", "b", " ", "c"}], "+", 
+    RowBox[{
+     SuperscriptBox["c", "2"], " ", "d"}], "+", 
+    RowBox[{
+     SuperscriptBox["a", "2"], " ", "e"}], "+", 
+    RowBox[{
+     SuperscriptBox["b", "2"], " ", "f"}], "-", 
+    RowBox[{"d", " ", "e", " ", "f"}]}], ",", "True", ",", "True"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.999412265069193*^9, 3.9994337801451626`*^9},
+ CellLabel->"Out[64]=",ExpressionUUID->"12723f51-69ff-6245-8654-3aa60c7ecfd0"]
+}, Open  ]],
+
+Cell["Collecting coefficients gives", "Text",ExpressionUUID->"f4896396-a751-bd46-8555-15861c36f198"],
+
+Cell["\[Chi](x) = x\.b3 - (2a + e)x\.b2 + (a\.b2 + 2ae - 2bc - df)x - \
+det(A),", "DisplayFormula",ExpressionUUID->"7bd463a1-c05c-ac46-86dd-\
+2d26fd77c5ef"],
+
+Cell["det(A) = a\.b2e - 2abc + b\.b2f + c\.b2d - def.", "DisplayFormula",ExpressionUUID->"41a99f91-f141-5b41-99f6-fb249573a9a5"],
+
+Cell["\<\
+Here 2a + e is the trace, while a\.b2 + 2ae - 2bc - df is the sum of the \
+principal minors of order 2. The symbolic checks confirm the expansion and \
+the overall sign.\
+\>", "Text",ExpressionUUID->"4ffaa211-861c-2f49-8c05-913fc0ed9e95"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3. Characterisation of \[Chi](x) = x\.b3", "Section",ExpressionUUID->"fca02a8f-d68e-ea41-b14a-f90bc91b662b"],
+
+Cell["\<\
+Equating the constant, linear and quadratic coefficients to zero gives the \
+following system. Eliminating e through the trace condition yields e = -2a.\
+\>", "Text",ExpressionUUID->"33efc4b2-4f32-d04a-a8f6-b972cc685fb2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"coefficientEquations", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Coefficient", "[", 
+       RowBox[{"chi", ",", " ", "x", ",", " ", "k"}], "]"}], " ", "==", " ", 
+      "0"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", " ", "0", ",", " ", "2"}], "}"}]}], "]"}]}], ";", " ", 
+  RowBox[{"coefficientEquations", " ", "//", " ", "TableForm"}]}]], "Input",
+ CellLabel->"In[65]:=",ExpressionUUID->"2ef5a794-2c66-af47-bf21-f77c640573aa"],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{"2", " ", "a", " ", "b", " ", "c"}], "-", 
+        RowBox[{
+         SuperscriptBox["c", "2"], " ", "d"}], "-", 
+        RowBox[{
+         SuperscriptBox["a", "2"], " ", "e"}], "-", 
+        RowBox[{
+         SuperscriptBox["b", "2"], " ", "f"}], "+", 
+        RowBox[{"d", " ", "e", " ", "f"}]}], "\[Equal]", "0"}]},
+     {
+      RowBox[{
+       RowBox[{
+        SuperscriptBox["a", "2"], "-", 
+        RowBox[{"2", " ", "b", " ", "c"}], "+", 
+        RowBox[{"2", " ", "a", " ", "e"}], "-", 
+        RowBox[{"d", " ", "f"}]}], "\[Equal]", "0"}]},
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "2"}], " ", "a"}], "-", "e"}], "\[Equal]", "0"}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}],
+   Column],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.9994122650727005`*^9, 3.999433780148163*^9},
+ CellLabel->
+  "Out[65]//TableForm=",ExpressionUUID->"b1812b8a-9208-4943-8911-\
+488bf70bbbd1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"traceRule", " ", "=", " ", 
+   RowBox[{"e", " ", "->", " ", 
+    RowBox[{
+     RowBox[{"-", "2"}], " ", "a"}]}]}], ";", " ", 
+  RowBox[{"reducedPolynomial", " ", "=", " ", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"chi", " ", "/.", " ", "traceRule"}], "]"}]}], ";", " ", 
+  "reducedPolynomial"}]], "Input",
+ CellLabel->"In[66]:=",ExpressionUUID->"bf4d26b7-3c67-f14f-b4c9-3033f356be00"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"2", " ", 
+   SuperscriptBox["a", "3"]}], "+", 
+  RowBox[{"2", " ", "a", " ", "b", " ", "c"}], "-", 
+  RowBox[{
+   SuperscriptBox["c", "2"], " ", "d"}], "-", 
+  RowBox[{
+   SuperscriptBox["b", "2"], " ", "f"}], "-", 
+  RowBox[{"2", " ", "a", " ", "d", " ", "f"}], "-", 
+  RowBox[{"3", " ", 
+   SuperscriptBox["a", "2"], " ", "x"}], "-", 
+  RowBox[{"2", " ", "b", " ", "c", " ", "x"}], "-", 
+  RowBox[{"d", " ", "f", " ", "x"}], "+", 
+  SuperscriptBox["x", "3"]}]], "Output",
+ CellChangeTimes->{3.9994122650747013`*^9, 3.999433780151163*^9},
+ CellLabel->"Out[66]=",ExpressionUUID->"9b9a2500-ecf4-ba45-ad9e-80afa06bf5e9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"nilpotentConditions", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"e", " ", "==", " ", 
+      RowBox[{
+       RowBox[{"-", "2"}], " ", "a"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"3", " ", 
+        RowBox[{"a", "^", "2"}]}], " ", "+", " ", 
+       RowBox[{"2", " ", "b", " ", "c"}], " ", "+", " ", 
+       RowBox[{"d", " ", "f"}]}], " ", "==", " ", "0"}], ",", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "2"}], " ", 
+        RowBox[{"a", "^", "3"}]}], " ", "-", " ", 
+       RowBox[{"2", " ", "a", " ", "b", " ", "c"}], " ", "+", " ", 
+       RowBox[{
+        RowBox[{"b", "^", "2"}], " ", "f"}], " ", "+", " ", 
+       RowBox[{
+        RowBox[{"c", "^", "2"}], " ", "d"}], " ", "+", " ", 
+       RowBox[{"2", " ", "a", " ", "d", " ", "f"}]}], " ", "==", " ", "0"}]}],
+     "}"}]}], ";", " ", 
+  RowBox[{"nilpotentConditions", " ", "//", " ", "TableForm"}]}]], "Input",
+ CellLabel->"In[67]:=",ExpressionUUID->"80364bb0-e1ed-9747-9c71-f50318f1e5c4"],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      RowBox[{"e", "\[Equal]", 
+       RowBox[{
+        RowBox[{"-", "2"}], " ", "a"}]}]},
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{"3", " ", 
+         SuperscriptBox["a", "2"]}], "+", 
+        RowBox[{"2", " ", "b", " ", "c"}], "+", 
+        RowBox[{"d", " ", "f"}]}], "\[Equal]", "0"}]},
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "2"}], " ", 
+         SuperscriptBox["a", "3"]}], "-", 
+        RowBox[{"2", " ", "a", " ", "b", " ", "c"}], "+", 
+        RowBox[{
+         SuperscriptBox["c", "2"], " ", "d"}], "+", 
+        RowBox[{
+         SuperscriptBox["b", "2"], " ", "f"}], "+", 
+        RowBox[{"2", " ", "a", " ", "d", " ", "f"}]}], "\[Equal]", "0"}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}],
+   Column],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.9994122650776997`*^9, 3.9994337801541634`*^9},
+ CellLabel->
+  "Out[67]//TableForm=",ExpressionUUID->"8c77291f-031a-c944-9f30-\
+e45ad1f96969"]
+}, Open  ]],
+
+Cell["\<\
+These three equations are necessary and sufficient for \[Chi](x) = x\.b3. By \
+Cayley\[Dash]Hamilton they imply A\.b3 = 0; conversely, A\.b3 = 0 forces all \
+eigenvalues to vanish. The trace condition alone is insufficient.\
+\>", "Text",ExpressionUUID->"e81cf6a9-1509-9a41-baf0-3e7339e270a9"],
+
+Cell["\<\
+For constructing examples, substitution of df = -3a\.b2 - 2bc into the \
+determinant condition gives the equivalent system\
+\>", "Text",ExpressionUUID->"28817342-e11d-4a4c-9413-8b10419c2523"],
+
+Cell["e = -2a,     df = -3a\.b2 - 2bc,     b\.b2f + c\.b2d = 8a\.b3 + 6abc.", \
+"DisplayFormula",ExpressionUUID->"a477fb9b-b6d4-0c4b-a5ae-8dce7f0cacae"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["4. A nonnegative example", "Section",ExpressionUUID->"9697fc11-6f61-0f46-ade5-d6b3e832b0f1"],
+
+Cell["\<\
+The upper shift U provides a nonnegative persymmetric realisation of the \
+spectrum {0, 0, 0}. The output records U, the persymmetry check, its \
+characteristic polynomial, U\.b2 and U\.b3.\
+\>", "Text",ExpressionUUID->"cf3b6caa-bc66-ec4c-b30a-281644f3ef43"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"upperShift", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "1", ",", " ", "0"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "0", ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], "}"}]}], ";", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "upperShift", "]"}], ",", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{"upperShift", " ", "==", " ", 
+      RowBox[{"j3", ".", 
+       RowBox[{"Transpose", "[", "upperShift", "]"}], ".", "j3"}]}], "]"}], ",",
+     " ", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Det", "[", 
+      RowBox[{
+       RowBox[{"x", " ", 
+        RowBox[{"IdentityMatrix", "[", "3", "]"}]}], " ", "-", " ", 
+       "upperShift"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"upperShift", ",", " ", "2"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"upperShift", ",", " ", "3"}], "]"}], "]"}]}], "}"}]}]], "Input",
+ CellLabel->"In[68]:=",ExpressionUUID->"a6b96357-457f-9c48-9278-dfb239945c76"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "1", "0"},
+       {"0", "0", "1"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", "True", ",", 
+   SuperscriptBox["x", "3"], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "1"},
+       {"0", "0", "0"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "0"},
+       {"0", "0", "0"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{3.9994122651076984`*^9, 3.999433780179161*^9},
+ CellLabel->"Out[68]=",ExpressionUUID->"207ef9a8-d969-bd43-b26f-e283f9beec65"]
+}, Open  ]],
+
+Cell["\<\
+Upper triangularity gives \[Chi](x) = x\.b3. Since U\.b2 has a nonzero (1,3) \
+entry and U\.b3 = 0, its minimal polynomial is x\.b3 and its nilpotency index \
+is 3.\
+\>", "Text",ExpressionUUID->"11ed8882-764a-c44f-8568-2087e45bee7d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5. Signed cycles can cancel", "Section",ExpressionUUID->"d2818eec-0eec-4e4f-9c15-50ec989c6274"],
+
+Cell["\<\
+Consider the signed persymmetric matrix M below. The output verifies \
+\[Chi](x) = x\.b3, M\.b2 \[NotEqual] 0 and M\.b3 = 0, so M has nilpotency \
+index 3 despite the directed cycles in its nonzero pattern.\
+\>", "Text",ExpressionUUID->"198eee8a-8752-b442-b00c-27957e169765"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"mixedCycles", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "1", ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", " ", "0", ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "4"}], ",", " ", "2", ",", " ", "0"}], "}"}]}], "}"}]}], ";",
+   " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "mixedCycles", "]"}], ",", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{"mixedCycles", " ", "==", " ", 
+      RowBox[{"j3", ".", 
+       RowBox[{"Transpose", "[", "mixedCycles", "]"}], ".", "j3"}]}], "]"}], ",",
+     " ", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Det", "[", 
+      RowBox[{
+       RowBox[{"x", " ", 
+        RowBox[{"IdentityMatrix", "[", "3", "]"}]}], " ", "-", " ", 
+       "mixedCycles"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"mixedCycles", ",", " ", "2"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"mixedCycles", ",", " ", "3"}], "]"}], "]"}]}], 
+   "}"}]}]], "Input",
+ CellLabel->"In[69]:=",ExpressionUUID->"9cfaaabb-8dcd-7142-b164-b6f7ce95fc34"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "1", "1"},
+       {"2", "0", "1"},
+       {
+        RowBox[{"-", "4"}], "2", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", "True", ",", 
+   SuperscriptBox["x", "3"], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {
+        RowBox[{"-", "2"}], "2", "1"},
+       {
+        RowBox[{"-", "4"}], "4", "2"},
+       {"4", 
+        RowBox[{"-", "4"}], 
+        RowBox[{"-", "2"}]}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "0"},
+       {"0", "0", "0"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{3.9994122651356983`*^9, 3.9994337801831627`*^9},
+ CellLabel->"Out[69]=",ExpressionUUID->"36d212e9-85ef-6445-9958-7197b674c1eb"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Cancellation in the characteristic coefficients", "Subsection",ExpressionUUID->"0f149bda-7af7-1941-bff4-8b1362faeabb"],
+
+Cell["\<\
+For the general zero-diagonal persymmetric matrix, the expression in section \
+2 reduces to\
+\>", "Text",ExpressionUUID->"36d4eaf0-6d54-c84d-bbda-e5c0b7df9c96"],
+
+Cell["\[Chi](x) = x\.b3 - (2bc + df)x - (b\.b2f + c\.b2d).", "DisplayFormula",ExpressionUUID->"0aa092bf-7562-de4e-aa62-c84613ac1500"],
+
+Cell["\<\
+For M, the products associated with the three directed 2-cycles and the two \
+directed 3-cycles satisfy\
+\>", "Text",ExpressionUUID->"85eb1256-4241-0546-81cb-db87483a8c53"],
+
+Cell["2bc + df = (1 \[Times] 2) + (1 \[Times] 2) + (1 \[Times] (-4)) = 0,", \
+"DisplayFormula",ExpressionUUID->"44e931d7-8eed-ac4c-bb35-2c34488d251b"],
+
+Cell["b\.b2f + c\.b2d = (1 \[Times] 1 \[Times] (-4)) + (1 \[Times] 2 \[Times] \
+2) = 0.", "DisplayFormula",ExpressionUUID->"af81a735-1652-7743-8db6-\
+236ab323859e"],
+
+Cell["\<\
+Together with the zero trace, these cancellations account for every \
+coefficient below x\.b3. The sign pattern displayed next is realised by a \
+nilpotent matrix, but does not force nilpotency for every choice of \
+magnitudes.\
+\>", "Text",ExpressionUUID->"6a648638-1189-af4f-99f9-343cd4ac46bf"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"signPattern", " ", "=", " ", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Which", "[", 
+       RowBox[{
+        RowBox[{"#", " ", ">", " ", "0"}], ",", " ", "\"\<+\>\"", ",", " ", 
+        RowBox[{"#", " ", "<", " ", "0"}], ",", " ", "\"\<-\>\"", ",", " ", 
+        "True", ",", " ", "\"\<0\>\""}], "]"}], " ", "&"}], ",", " ", 
+     "mixedCycles", ",", " ", 
+     RowBox[{"{", "2", "}"}]}], "]"}]}], ";", " ", 
+  RowBox[{"Grid", "[", 
+   RowBox[{"signPattern", ",", " ", 
+    RowBox[{"Frame", " ", "->", " ", "All"}]}], "]"}]}]], "Input",
+ CellLabel->"In[70]:=",ExpressionUUID->"6358cb49-ca34-2740-9bf7-0bb936f86bd3"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"0\"\>", "\<\"+\"\>", "\<\"+\"\>"},
+    {"\<\"+\"\>", "\<\"0\"\>", "\<\"+\"\>"},
+    {"\<\"-\"\>", "\<\"+\"\>", "\<\"0\"\>"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.9994122651386986`*^9, 3.999433780186165*^9},
+ CellLabel->"Out[70]=",ExpressionUUID->"79dd7e83-e3b9-9344-b460-2435e95a7df7"]
+}, Open  ]],
+
+Cell["\<\
+For example, replacing the (3,1) entry -4 by -3 preserves both persymmetry \
+and the sign pattern, but changes the characteristic polynomial to x\.b3 - x \
+- 1.\
+\>", "Text",ExpressionUUID->"0115991f-8a54-3e42-972a-2f15ede8faf0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The directed nonzero pattern", "Subsection",ExpressionUUID->"ff8039e8-7049-ba4b-8f3c-bd3559713a0d"],
+
+Cell["\<\
+For any square matrix B, define G(B) on the matrix indices by i \[RightArrow] \
+j exactly when the (i,j) entry is nonzero, including loops for nonzero \
+diagonal entries. The following graph records this pattern for M; it does not \
+encode edge signs or magnitudes.\
+\>", "Text",ExpressionUUID->"6027b80d-01cc-4545-8cc9-5e2d3820e419"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"adjacency", " ", "=", " ", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Boole", "[", 
+       RowBox[{"#", " ", "!=", " ", "0"}], "]"}], " ", "&"}], ",", " ", 
+     "mixedCycles", ",", " ", 
+     RowBox[{"{", "2", "}"}]}], "]"}]}], ";", " ", 
+  RowBox[{"AdjacencyGraph", "[", 
+   RowBox[{"adjacency", ",", " ", 
+    RowBox[{"DirectedEdges", " ", "->", " ", "True"}], ",", " ", 
+    RowBox[{"VertexLabels", " ", "->", " ", "\"\<Name\>\""}]}], 
+   "]"}]}]], "Input",
+ CellLabel->"In[71]:=",ExpressionUUID->"c6f7be2a-8357-d54d-a863-2d425fe83169"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{1, 2, 3}, {
+       SparseArray[
+       Automatic, {3, 3}, 0, {
+        1, {{0, 2, 4, 6}, {{2}, {3}, {1}, {3}, {1}, {2}}}, Pattern}], Null}, {
+      VertexLabels -> {"Name"}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.7], Opacity[0.7], CapForm["Round"], Arrowheads[
+        Medium], 
+        ArrowBox[
+         BezierCurveBox[{{-0.8660254037844384, -0.49999999999999933`}, \
+{-0.6796738226668951, 0.3924098644778713}, {1.8369701987210297`*^-16, 1.}}], 
+         0.020399597244776385`], 
+        ArrowBox[
+         BezierCurveBox[{{-0.8660254037844384, -0.49999999999999933`}, {
+          9.175601618325135*^-15, -0.21518027104425425`}, {
+          0.8660254037844389, -0.5000000000000012}}], 0.020399597244776385`], 
+        ArrowBox[
+         BezierCurveBox[{{1.8369701987210297`*^-16, 
+          1.}, {-0.18635158111754352`, 
+          0.10759013552212698`}, {-0.8660254037844384, \
+-0.49999999999999933`}}], 0.020399597244776385`], 
+        ArrowBox[
+         BezierCurveBox[{{1.8369701987210297`*^-16, 1.}, {0.6796738226668931, 
+          0.39240986447787535`}, {0.8660254037844389, -0.5000000000000012}}], 
+         0.020399597244776385`], 
+        ArrowBox[
+         BezierCurveBox[{{
+          0.8660254037844389, -0.5000000000000012}, {-2.930024046187862*^-15, \
+-0.7848197289557464}, {-0.8660254037844384, -0.49999999999999933`}}], 
+         0.020399597244776385`], 
+        ArrowBox[
+         BezierCurveBox[{{0.8660254037844389, -0.5000000000000012}, {
+          0.18635158111754768`, 0.10759013552212278`}, {
+          1.8369701987210297`*^-16, 1.}}], 0.020399597244776385`]}, 
+       {Hue[0.6, 0.5, 1.], EdgeForm[{GrayLevel[0], Opacity[
+        0.7]}], {
+         DiskBox[{-0.8660254037844384, -0.49999999999999933`}, 
+          0.020399597244776385], 
+         InsetBox["1", 
+          Offset[{2, 2}, {-0.845625806539662, -0.479600402755223}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.8369701987210297`*^-16, 1.}, 0.020399597244776385], 
+         InsetBox["2", 
+          Offset[{2, 2}, {0.02039959724477657, 1.0203995972447764}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.8660254037844389, -0.5000000000000012}, 
+          0.020399597244776385], 
+         InsetBox["3", 
+          Offset[{2, 2}, {0.8864250010292153, -0.47960040275522486}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->"NetworkGraphics",
+  FormatType->TraditionalForm,
+  FrameTicks->None]], "Output",
+ CellChangeTimes->{3.999412265172209*^9, 3.999433780219166*^9},
+ CellLabel->"Out[71]=",ExpressionUUID->"c697701b-75b6-4c47-bc2b-274a32331b5d"]
+}, Open  ]],
+
+Cell["\<\
+The link with matrix powers is the weighted-walk identity. For a directed \
+walk w = (i\:2080, \[Ellipsis], i\:2096), let wt(w) be the product of the \
+matrix entries corresponding to its successive edges. Then\
+\>", "Text",ExpressionUUID->"df8b2acc-cb56-6140-aec1-93fd62ce6a03"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   SubscriptBox[
+    RowBox[{"(", 
+     SuperscriptBox["B", "k"], ")"}], "ij"], "=", 
+   UnderscriptBox["\[Sum]", 
+    RowBox[{"w", ":", "i", "\[Rule]", "j", ",", 
+     RowBox[{"|", "w", "|"}], "=", "k"}]], 
+   RowBox[{"wt", "(", "w", ")"}]}], TraditionalForm]], "DisplayFormula",Expres\
+sionUUID->"8a02cf35-6377-474f-b213-63c73c85c545"],
+
+Cell["\<\
+Here k \[GreaterEqual] 1 and |w| denotes the number of edges, with \
+repetitions permitted. This is the usual matrix-product expansion, organised \
+by walks in G(B).\
+\>", "Text",ExpressionUUID->"10b6966d-51de-6947-be2d-c0e6856915de"],
+
+Cell["\<\
+In M, the length-three closed walks based at vertex 1 are 1 \[RightArrow] 2 \
+\[RightArrow] 3 \[RightArrow] 1 and 1 \[RightArrow] 3 \[RightArrow] 2 \
+\[RightArrow] 1, with weights -4 and +4. Thus the (1,1) entry of M\.b3 is \
+zero. The full matrix computation above verifies cancellation in every entry \
+of the cube.\
+\>", "Text",ExpressionUUID->"15a622a3-f0bc-2543-8ee5-df9bfb5fde7d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Consequences for prescribed patterns", "Subsection",ExpressionUUID->"98f606f8-34cb-a048-bf11-61fa221d0634"],
+
+Cell[TextData[{
+ StyleBox["Acyclic pattern. ",
+  FontWeight->"Bold"],
+ "If G(B) is acyclic on n vertices, it has no walk of length n. The \
+weighted-walk identity therefore gives B\:207f = 0, independently of the \
+signs of the nonzero entries. In particular, G(U) is the chain 1 \
+\[RightArrow] 2 \[RightArrow] 3."
+}], "Text",ExpressionUUID->"4bed3ae7-a117-034e-9826-5e53165ee324"],
+
+Cell[TextData[{
+ StyleBox["Nonnegative case. ",
+  FontWeight->"Bold"],
+ "If B is entrywise nonnegative and G(B) contains a directed cycle of length \
+l and weight c > 0 through i, repeating that cycle gives the bound below for \
+every positive integer r."
+}], "Text",ExpressionUUID->"ae865fc3-1971-f845-a08d-a35e2f9d4d58"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   SubscriptBox[
+    RowBox[{"(", 
+     SuperscriptBox["B", "rl"], ")"}], "ii"], "\[GreaterEqual]", 
+   SuperscriptBox["c", "r"], ">", "0"}], TraditionalForm]], "DisplayFormula",E\
+xpressionUUID->"49fe914f-d78a-ea49-a868-4aa117e6e7b9"],
+
+Cell["\<\
+Hence B has nonzero powers of arbitrarily large order and cannot be \
+nilpotent. Together with the acyclic case, this proves that an entrywise \
+nonnegative matrix is nilpotent if and only if its directed nonzero pattern \
+is acyclic.\
+\>", "Text",ExpressionUUID->"1bae00bb-490a-eb40-b0f2-21396743778d"],
+
+Cell[TextData[{
+ StyleBox["Signed case. ",
+  FontWeight->"Bold"],
+ "Negative walk weights invalidate the positivity argument. The matrix M \
+exhibits this obstruction: its graph identifies the available cycle products, \
+while their values determine cancellation. Thus the graph supplies structural \
+restrictions on a prescribed pattern, rather than a nilpotency test for \
+arbitrary signed matrices."
+}], "Text",ExpressionUUID->"5425b9db-de98-8c42-82b8-4cd70678ed0b"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["6. Nonzero diagonal and a smaller nilpotency index", "Section",ExpressionUUID->"09f5bff1-3f01-f24d-acbd-4a03c75b309a"],
+
+Cell["\<\
+The next example N has a = 1 and e = -2. It demonstrates that a signed \
+persymmetric nilpotent matrix may have nonzero diagonal entries and \
+nilpotency index 2.\
+\>", "Text",ExpressionUUID->"27487217-07e5-0a4e-b313-b6bb78f91e79"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"rankOneExample", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", " ", "1", ",", " ", 
+       RowBox[{
+        RowBox[{"-", "1"}], "/", "2"}]}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "2"}], ",", " ", 
+       RowBox[{"-", "2"}], ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "2"}], ",", " ", 
+       RowBox[{"-", "2"}], ",", " ", "1"}], "}"}]}], "}"}]}], ";", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "rankOneExample", "]"}], ",", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{"rankOneExample", " ", "==", " ", 
+      RowBox[{"j3", ".", 
+       RowBox[{"Transpose", "[", "rankOneExample", "]"}], ".", "j3"}]}], 
+     "]"}], ",", " ", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Det", "[", 
+      RowBox[{
+       RowBox[{"x", " ", 
+        RowBox[{"IdentityMatrix", "[", "3", "]"}]}], " ", "-", " ", 
+       "rankOneExample"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"MatrixRank", "[", "rankOneExample", "]"}], ",", " ", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"rankOneExample", ",", " ", "2"}], "]"}], "]"}]}], 
+   "}"}]}]], "Input",
+ CellLabel->"In[72]:=",ExpressionUUID->"5cb63d83-1d21-7c4e-8757-768dd7dc1cd5"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", "1", 
+        RowBox[{"-", 
+         FractionBox["1", "2"]}]},
+       {
+        RowBox[{"-", "2"}], 
+        RowBox[{"-", "2"}], "1"},
+       {
+        RowBox[{"-", "2"}], 
+        RowBox[{"-", "2"}], "1"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", "True", ",", 
+   SuperscriptBox["x", "3"], ",", "1", ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "0"},
+       {"0", "0", "0"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{3.9994122651792088`*^9, 3.999433780244669*^9},
+ CellLabel->"Out[72]=",ExpressionUUID->"9a2733d5-0018-5f44-a609-5280ffe6630d"]
+}, Open  ]],
+
+Cell["\<\
+The rank-one structure explains the vanishing square: N = uv\:1d40 with u = \
+(1, -2, -2)\:1d40 and v = (1, 1, -1/2)\:1d40. Since v\:1d40u = 0, we have N\
+\.b2 = u(v\:1d40u)v\:1d40 = 0. As N \[NotEqual] 0, its minimal polynomial is \
+x\.b2, although its characteristic polynomial remains x\.b3.\
+\>", "Text",ExpressionUUID->"57ac08ba-7bc0-8c48-9669-c5cc8f2bd35b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["7. Reality of eigenvalues is not automatic", "Section",ExpressionUUID->"38879280-2b72-eb4a-a89e-734374c64e6a"],
+
+Cell["\<\
+The following matrix is both persymmetric and real skew-symmetric. Its \
+characteristic polynomial x(x\.b2 + 2) gives the spectrum {0, i\[Sqrt]2, -i\
+\[Sqrt]2}, demonstrating that real persymmetry alone does not imply a real \
+spectrum.\
+\>", "Text",ExpressionUUID->"4e27494f-ea34-9a4f-9125-f941e01443f2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"complexExample", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "1", ",", " ", "0"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", " ", "0", ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", 
+       RowBox[{"-", "1"}], ",", " ", "0"}], "}"}]}], "}"}]}], ";", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"Simplify", "[", 
+     RowBox[{"complexExample", " ", "==", " ", 
+      RowBox[{"j3", ".", 
+       RowBox[{"Transpose", "[", "complexExample", "]"}], ".", "j3"}]}], 
+     "]"}], ",", " ", 
+    RowBox[{"Factor", "[", 
+     RowBox[{"Det", "[", 
+      RowBox[{
+       RowBox[{"x", " ", 
+        RowBox[{"IdentityMatrix", "[", "3", "]"}]}], " ", "-", " ", 
+       "complexExample"}], "]"}], "]"}], ",", " ", 
+    RowBox[{"Eigenvalues", "[", "complexExample", "]"}]}], "}"}]}]], "Input",
+ CellLabel->"In[73]:=",ExpressionUUID->"9f995ad1-d0d0-f54d-bdf0-f10476400b62"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", 
+   RowBox[{"x", " ", 
+    RowBox[{"(", 
+     RowBox[{"2", "+", 
+      SuperscriptBox["x", "2"]}], ")"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\[ImaginaryI]", " ", 
+      SqrtBox["2"]}], ",", 
+     RowBox[{
+      RowBox[{"-", "\[ImaginaryI]"}], " ", 
+      SqrtBox["2"]}], ",", "0"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.9994122651832104`*^9, 3.999433780249668*^9},
+ CellLabel->"Out[73]=",ExpressionUUID->"f50a0b80-2059-9847-b14d-173060026cb5"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["8. Nonnegative specialization", "Section",
+ CellChangeTimes->{{3.999434981342079*^9, 
+  3.999434981513092*^9}},ExpressionUUID->"dd8c56d4-15cc-064e-9626-\
+e73e5b9eb3a8"],
+
+Cell["\<\
+Suppose A is entrywise nonnegative and \[Chi](x) = x\.b3. The trace condition \
+gives a = e = 0. The remaining equations are 2bc + df = 0 and b\.b2f + c\.b2d \
+= 0; nonnegativity therefore yields\
+\>", "Text",ExpressionUUID->"075a7e9a-0413-7843-a51d-010fb735c1a4"],
+
+Cell["a = e = 0,     bc = df = 0,     b\.b2f = c\.b2d = 0.", "DisplayFormula",ExpressionUUID->"523d14e3-bc76-d440-a5cd-75de5c91e5b9"],
+
+Cell["\<\
+Conversely, these equalities force \[Chi](x) = x\.b3. They eliminate loops, \
+directed 2-cycles and directed 3-cycles, respectively, giving the entrywise \
+version of the acyclicity criterion in this dimension. For signed entries, \
+the coefficient equations instead permit cancellation between the \
+corresponding products.\
+\>", "Text",ExpressionUUID->"0effdb26-3eba-bb4d-9701-cb86324200b1"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1908, 999.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowTitle->"Persymmetric 3 x 3 matrices",
+FrontEndVersion->"15.0 for Microsoft Windows (64-bit) (July 2, 2026)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"2cec3934-1e46-d940-9d7b-ac659a57845f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[617, 23, 106, 0, 96, "Title",ExpressionUUID->"1a23e6f7-cfb2-be45-8bd2-9f70cbece0a4"],
+Cell[726, 25, 146, 2, 52, "Subtitle",ExpressionUUID->"67f7b603-c1ee-b444-a49f-b42b1c8498ad"],
+Cell[875, 29, 208, 3, 33, "Text",ExpressionUUID->"2a963af7-5aba-624b-84e1-689f9d64a09e"],
+Cell[CellGroupData[{
+Cell[1108, 36, 108, 0, 66, "Section",ExpressionUUID->"917e3af2-1be2-184c-be48-f7155335f40e"],
+Cell[1219, 38, 373, 5, 33, "Text",ExpressionUUID->"e6ba781a-89fb-344d-b17f-c89bd3e4254f"],
+Cell[CellGroupData[{
+Cell[1617, 47, 779, 19, 28, "Input",ExpressionUUID->"df981a7d-cbc9-e246-af20-4164717df7fe"],
+Cell[2399, 68, 1254, 36, 62, "Output",ExpressionUUID->"51362344-5fbf-554c-9f3a-7d00f83e0646"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3690, 109, 476, 12, 28, "Input",ExpressionUUID->"8d2053eb-001f-6d46-afac-ac5fa470b737"],
+Cell[4169, 123, 222, 4, 32, "Output",ExpressionUUID->"15d0b2a0-6f6f-f74c-820f-0bb0e4833b1c"]
+}, Open  ]],
+Cell[4406, 130, 250, 4, 33, "Text",ExpressionUUID->"d3ca4893-e656-7f4e-8cc5-4ac16864d353"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4693, 139, 102, 0, 66, "Section",ExpressionUUID->"82cd4f98-13c2-e64e-92d9-d11cca88662d"],
+Cell[4798, 141, 272, 4, 33, "Text",ExpressionUUID->"78d4e409-2b16-5141-a7d8-f01bc429fbdc"],
+Cell[CellGroupData[{
+Cell[5095, 149, 352, 9, 28, "Input",ExpressionUUID->"e487e725-542f-0148-91dd-a1bdcd706c03"],
+Cell[5450, 160, 812, 21, 32, "Output",ExpressionUUID->"31242fd8-8072-fb44-9aee-1e5184ef69d6"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6299, 186, 1150, 30, 28, "Input",ExpressionUUID->"a136f298-1140-d841-84b1-79e2ce408593"],
+Cell[7452, 218, 548, 15, 34, "Output",ExpressionUUID->"12723f51-69ff-6245-8654-3aa60c7ecfd0"]
+}, Open  ]],
+Cell[8015, 236, 100, 0, 33, "Text",ExpressionUUID->"f4896396-a751-bd46-8555-15861c36f198"],
+Cell[8118, 238, 156, 2, 25, "DisplayFormula",ExpressionUUID->"7bd463a1-c05c-ac46-86dd-2d26fd77c5ef"],
+Cell[8277, 242, 128, 0, 25, "DisplayFormula",ExpressionUUID->"41a99f91-f141-5b41-99f6-fb249573a9a5"],
+Cell[8408, 244, 248, 4, 33, "Text",ExpressionUUID->"4ffaa211-861c-2f49-8c05-913fc0ed9e95"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8693, 253, 114, 0, 66, "Section",ExpressionUUID->"fca02a8f-d68e-ea41-b14a-f90bc91b662b"],
+Cell[8810, 255, 231, 3, 33, "Text",ExpressionUUID->"33efc4b2-4f32-d04a-a8f6-b972cc685fb2"],
+Cell[CellGroupData[{
+Cell[9066, 262, 518, 12, 28, "Input",ExpressionUUID->"2ef5a794-2c66-af47-bf21-f77c640573aa"],
+Cell[9587, 276, 1323, 41, 80, "Output",ExpressionUUID->"b1812b8a-9208-4943-8911-488bf70bbbd1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10947, 322, 418, 10, 28, "Input",ExpressionUUID->"bf4d26b7-3c67-f14f-b4c9-3033f356be00"],
+Cell[11368, 334, 653, 16, 32, "Output",ExpressionUUID->"9b9a2500-ecf4-ba45-ad9e-80afa06bf5e9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12058, 355, 1047, 27, 28, "Input",ExpressionUUID->"80364bb0-e1ed-9747-9c71-f50318f1e5c4"],
+Cell[13108, 384, 1311, 41, 80, "Output",ExpressionUUID->"8c77291f-031a-c944-9f30-e45ad1f96969"]
+}, Open  ]],
+Cell[14434, 428, 302, 4, 33, "Text",ExpressionUUID->"e81cf6a9-1509-9a41-baf0-3e7339e270a9"],
+Cell[14739, 434, 201, 3, 33, "Text",ExpressionUUID->"28817342-e11d-4a4c-9413-8b10419c2523"],
+Cell[14943, 439, 152, 1, 25, "DisplayFormula",ExpressionUUID->"a477fb9b-b6d4-0c4b-a5ae-8dce7f0cacae"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15132, 445, 98, 0, 66, "Section",ExpressionUUID->"9697fc11-6f61-0f46-ade5-d6b3e832b0f1"],
+Cell[15233, 447, 268, 4, 33, "Text",ExpressionUUID->"cf3b6caa-bc66-ec4c-b30a-281644f3ef43"],
+Cell[CellGroupData[{
+Cell[15526, 455, 1224, 31, 47, "Input",ExpressionUUID->"a6b96357-457f-9c48-9278-dfb239945c76"],
+Cell[16753, 488, 1830, 53, 62, "Output",ExpressionUUID->"207ef9a8-d969-bd43-b26f-e283f9beec65"]
+}, Open  ]],
+Cell[18598, 544, 243, 4, 33, "Text",ExpressionUUID->"11ed8882-764a-c44f-8568-2087e45bee7d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18878, 553, 101, 0, 66, "Section",ExpressionUUID->"d2818eec-0eec-4e4f-9c15-50ec989c6274"],
+Cell[18982, 555, 285, 4, 33, "Text",ExpressionUUID->"198eee8a-8752-b442-b00c-27957e169765"],
+Cell[CellGroupData[{
+Cell[19292, 563, 1261, 34, 47, "Input",ExpressionUUID->"9cfaaabb-8dcd-7142-b164-b6f7ce95fc34"],
+Cell[20556, 599, 1952, 58, 62, "Output",ExpressionUUID->"36d212e9-85ef-6445-9958-7197b674c1eb"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22545, 662, 124, 0, 53, "Subsection",ExpressionUUID->"0f149bda-7af7-1941-bff4-8b1362faeabb"],
+Cell[22672, 664, 170, 3, 33, "Text",ExpressionUUID->"36d4eaf0-6d54-c84d-bbda-e5c0b7df9c96"],
+Cell[22845, 669, 133, 0, 25, "DisplayFormula",ExpressionUUID->"0aa092bf-7562-de4e-aa62-c84613ac1500"],
+Cell[22981, 671, 182, 3, 33, "Text",ExpressionUUID->"85eb1256-4241-0546-81cb-db87483a8c53"],
+Cell[23166, 676, 150, 1, 25, "DisplayFormula",ExpressionUUID->"44e931d7-8eed-ac4c-bb35-2c34488d251b"],
+Cell[23319, 679, 164, 2, 25, "DisplayFormula",ExpressionUUID->"af81a735-1652-7743-8db6-236ab323859e"],
+Cell[23486, 683, 306, 5, 33, "Text",ExpressionUUID->"6a648638-1189-af4f-99f9-343cd4ac46bf"],
+Cell[CellGroupData[{
+Cell[23817, 692, 675, 16, 28, "Input",ExpressionUUID->"6358cb49-ca34-2740-9bf7-0bb936f86bd3"],
+Cell[24495, 710, 498, 11, 71, "Output",ExpressionUUID->"79dd7e83-e3b9-9344-b460-2435e95a7df7"]
+}, Open  ]],
+Cell[25008, 724, 239, 4, 33, "Text",ExpressionUUID->"0115991f-8a54-3e42-972a-2f15ede8faf0"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25284, 733, 105, 0, 53, "Subsection",ExpressionUUID->"ff8039e8-7049-ba4b-8f3c-bd3559713a0d"],
+Cell[25392, 735, 344, 5, 33, "Text",ExpressionUUID->"6027b80d-01cc-4545-8cc9-5e2d3820e419"],
+Cell[CellGroupData[{
+Cell[25761, 744, 599, 15, 28, "Input",ExpressionUUID->"c6f7be2a-8357-d54d-a863-2d425fe83169"],
+Cell[26363, 761, 2890, 63, 360, "Output",ExpressionUUID->"c697701b-75b6-4c47-bc2b-274a32331b5d"]
+}, Open  ]],
+Cell[29268, 827, 289, 4, 33, "Text",ExpressionUUID->"df8b2acc-cb56-6140-aec1-93fd62ce6a03"],
+Cell[29560, 833, 372, 10, 41, "DisplayFormula",ExpressionUUID->"8a02cf35-6377-474f-b213-63c73c85c545"],
+Cell[29935, 845, 244, 4, 33, "Text",ExpressionUUID->"10b6966d-51de-6947-be2d-c0e6856915de"],
+Cell[30182, 851, 396, 6, 33, "Text",ExpressionUUID->"15a622a3-f0bc-2543-8ee5-df9bfb5fde7d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[30615, 862, 113, 0, 53, "Subsection",ExpressionUUID->"98f606f8-34cb-a048-bf11-61fa221d0634"],
+Cell[30731, 864, 382, 7, 33, "Text",ExpressionUUID->"4bed3ae7-a117-034e-9826-5e53165ee324"],
+Cell[31116, 873, 322, 6, 33, "Text",ExpressionUUID->"ae865fc3-1971-f845-a08d-a35e2f9d4d58"],
+Cell[31441, 881, 270, 7, 26, "DisplayFormula",ExpressionUUID->"49fe914f-d78a-ea49-a868-4aa117e6e7b9"],
+Cell[31714, 890, 313, 5, 33, "Text",ExpressionUUID->"1bae00bb-490a-eb40-b0f2-21396743778d"],
+Cell[32030, 897, 469, 8, 55, "Text",ExpressionUUID->"5425b9db-de98-8c42-82b8-4cd70678ed0b"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[32548, 911, 124, 0, 66, "Section",ExpressionUUID->"09f5bff1-3f01-f24d-acbd-4a03c75b309a"],
+Cell[32675, 913, 241, 4, 33, "Text",ExpressionUUID->"27487217-07e5-0a4e-b313-b6bb78f91e79"],
+Cell[CellGroupData[{
+Cell[32941, 921, 1328, 36, 47, "Input",ExpressionUUID->"5cb63d83-1d21-7c4e-8757-768dd7dc1cd5"],
+Cell[34272, 959, 1460, 43, 70, "Output",ExpressionUUID->"9a2733d5-0018-5f44-a609-5280ffe6630d"]
+}, Open  ]],
+Cell[35747, 1005, 373, 5, 33, "Text",ExpressionUUID->"57ac08ba-7bc0-8c48-9669-c5cc8f2bd35b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36157, 1015, 116, 0, 66, "Section",ExpressionUUID->"38879280-2b72-eb4a-a89e-734374c64e6a"],
+Cell[36276, 1017, 315, 5, 39, "Text",ExpressionUUID->"4e27494f-ea34-9a4f-9125-f941e01443f2"],
+Cell[CellGroupData[{
+Cell[36616, 1026, 1020, 27, 28, "Input",ExpressionUUID->"9f995ad1-d0d0-f54d-bdf0-f10476400b62"],
+Cell[37639, 1055, 523, 15, 34, "Output",ExpressionUUID->"f50a0b80-2059-9847-b14d-173060026cb5"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38211, 1076, 174, 3, 66, "Section",ExpressionUUID->"dd8c56d4-15cc-064e-9626-e73e5b9eb3a8"],
+Cell[38388, 1081, 274, 4, 33, "Text",ExpressionUUID->"075a7e9a-0413-7843-a51d-010fb735c1a4"],
+Cell[38665, 1087, 133, 0, 25, "DisplayFormula",ExpressionUUID->"523d14e3-bc76-d440-a5cd-75de5c91e5b9"],
+Cell[38801, 1089, 403, 6, 55, "Text",ExpressionUUID->"0effdb26-3eba-bb4d-9701-cb86324200b1"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
