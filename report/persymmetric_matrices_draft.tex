@@ -7,9 +7,10 @@
 \usepackage[hidelinks]{hyperref}
 
 \newtheorem{example}{Example}
+\newtheorem{lemma}{Lemma}
 
 \title{Persymmetric Matrices: Structure and Small Examples}
-\author{}
+\author{Andrea Rizzi - 25281252}
 \date{Working draft, September 2026}
 
 \begin{document}
@@ -42,10 +43,69 @@ not symmetric, since $a_{12}\ne a_{21}$.
 
 Persymmetry alone does not force real eigenvalues. The $2\times2$ analysis
 below supplies an explicit counterexample. A \emph{bisymmetric} matrix has the
-additional requirement $A=A^T$; the terminology and the nonnegative inverse
-eigenvalue problem provide background in Julio and Soto~\cite{julio-soto}.
-Our project instead permits prescribed positive, negative and zero entries,
-as set out in the project brief~\cite{project-brief}.
+additional requirement $A=A^T$.
+
+The first two lemmas of Julio and Soto~\cite{julio-soto} describe operations
+that preserve these two kinds of symmetry. We give short proofs and examples
+to make the distinction between them explicit. Write $A^F=J_nA^TJ_n$ for the
+flip-transpose of $A$. In particular, $(AB)^F=B^FA^F$ whenever the products
+are defined.
+
+\begin{lemma}[Closure of persymmetric matrices]\label{lem:persymmetric-closure}
+If $A$ and $B$ are real persymmetric matrices of the same order, then
+$sA+tB$ is persymmetric for any $s,t\in\mathbb R$. If $A$ is invertible,
+$A^{-1}$ is persymmetric. The transpose $A^T$ is also persymmetric.
+\end{lemma}
+\begin{proof}
+The first claim follows from
+$(sA+tB)^F=sA^F+tB^F=sA+tB$. For the second, the identity
+$A^{-1}A=I$ gives $A(A^{-1})^F=I$ after flip-transposition, so
+$(A^{-1})^F=A^{-1}$. Finally,
+$(A^T)^F=(A^F)^T=A^T$.
+\end{proof}
+
+\begin{example}
+Take
+\[
+ P=\begin{pmatrix}2&1\\3&2\end{pmatrix},\qquad
+ Q=\begin{pmatrix}1&4\\0&1\end{pmatrix}.
+\]
+Both matrices are persymmetric. So are
+$P+Q=\left(\begin{smallmatrix}3&5\\3&3\end{smallmatrix}\right)$,
+$P^{-1}=\left(\begin{smallmatrix}2&-1\\-3&2\end{smallmatrix}\right)$,
+and $P^T=\left(\begin{smallmatrix}2&3\\1&2\end{smallmatrix}\right)$.
+The inverse illustrates that persymmetry can be preserved even when
+nonnegativity is lost.
+\end{example}
+
+\begin{lemma}[Closure of bisymmetric matrices]\label{lem:bisymmetric-closure}
+If $A$ and $B$ are real bisymmetric matrices of the same order, then
+$sA+tB$ is bisymmetric for any $s,t\in\mathbb R$. If $A$ is invertible,
+$A^{-1}$ is bisymmetric. Moreover, $A^T$, $A^F$, and $J_nA$ are
+bisymmetric, and $J_nA=AJ_n$.
+\end{lemma}
+\begin{proof}
+Lemma~\ref{lem:persymmetric-closure} supplies the persymmetry of the
+linear combination, inverse, and transpose. Their symmetry follows from
+transposing $sA+tB$ and from $(A^{-1})^T=(A^T)^{-1}=A^{-1}$.
+Also $A^T=A^F=A$. Since $A=J_nA^TJ_n=J_nAJ_n$, multiplying by $J_n$
+on the left yields $J_nA=AJ_n$. Hence
+$(J_nA)^T=A^TJ_n=AJ_n=J_nA$ and
+$(J_nA)^F=A^FJ_n^F=AJ_n=J_nA$.
+\end{proof}
+
+\begin{example}
+For
+\[
+ C=\begin{pmatrix}2&1\\1&2\end{pmatrix},\qquad
+ J_2=\begin{pmatrix}0&1\\1&0\end{pmatrix},
+\]
+we have
+$J_2C=CJ_2=\left(\begin{smallmatrix}1&2\\2&1\end{smallmatrix}\right)$.
+Both $C$ and $J_2C$ are bisymmetric. Also
+$C^{-1}=\frac13\left(\begin{smallmatrix}2&-1\\-1&2\end{smallmatrix}\right)$
+is bisymmetric.
+\end{example}
 
 \section{Patterns and the two-dimensional case}
 
@@ -97,9 +157,8 @@ the spectral case:
  $\left(\begin{smallmatrix}1&1\\-1&1\end{smallmatrix}\right)$ has
  eigenvalues $1\pm i$.
 \end{itemize}
-For a directed graph formed from the nonzero entries, $b$ and $c$ supply the
-two opposite directed edges. That graph records whether the edges exist, but
-their signs are also needed to distinguish the first and third cases above.
+Thus the locations of nonzero entries alone do not determine the spectral
+case: the signs of $b$ and $c$ determine the sign of $bc$.
 
 \section{The three-dimensional nilpotent question}
 
@@ -136,19 +195,18 @@ The signed matrix
 \[
  N=\begin{pmatrix}0&1&1\\2&0&1\\-4&2&0\end{pmatrix}
 \]
-is also persymmetric and satisfies $\chi_N(x)=x^3$, although its graph has
-directed cycles. Its positive and negative weights cancel in the coefficients
-of the characteristic polynomial. Direct multiplication gives $N^2\ne0$ and
+is also persymmetric and satisfies $\chi_N(x)=x^3$. Positive and negative
+products cancel in the coefficients of its characteristic polynomial.
+Direct multiplication gives $N^2\ne0$ and
 $N^3=0$. This illustrates why the signed-pattern problem differs from the
 nonnegative problem.
 \end{example}
 
-The cancellation can be read from the graph. When $a=e=0$, the coefficient
-of $x$ is minus the two-step cycle sum $2bc+df$, while the determinant is the
-sum $b^2f+c^2d$ of the two directed three-step cycle weights. For $N$, these
-quantities are $2(1)(2)+(1)(-4)=0$ and
-$(1)^2(-4)+(2)^2(1)=0$. Thus the graph records the cycles, but the signed
-weights determine whether their contributions cancel.
+The cancellation is visible algebraically. When $a=e=0$, the coefficient of
+$x$ is $-(2bc+df)$, while the determinant is $b^2f+c^2d$. For $N$, both
+expressions vanish because $2(1)(2)+(1)(-4)=0$ and
+$(1)^2(-4)+(2)^2(1)=0$. The signs of the entries make these cancellations
+possible.
 
 If $A_3$ is entrywise nonnegative and $\chi_{A_3}(x)=x^3$, the first equation
 in \eqref{eq:nilpotent-conditions} forces $a=e=0$: a sum of nonnegative
