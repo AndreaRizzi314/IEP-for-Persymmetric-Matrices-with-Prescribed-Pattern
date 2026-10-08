@@ -1,0 +1,2124 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 15.0' *)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Zero-diagonal persymmetric 3 by 3 matrices", "Title",ExpressionUUID->"9bd4b575-5a3e-3947-a56c-b7190fa0e5d9"],
+
+Cell[CellGroupData[{
+
+Cell["1. The family and the question", "Section",ExpressionUUID->"3119da70-0317-9b44-a7c8-7c38cea403a7"],
+
+Cell["Suppose", "Text",
+ CellChangeTimes->{{4.0003751251630745`*^9, 
+  4.000375126182987*^9}},ExpressionUUID->"51f05d80-47a7-fb4f-b0b1-\
+4c223b76b1cf"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{"A", "(", 
+     RowBox[{"b", ",", "c", ",", "d", ",", "f"}], ")"}], "\[LongEqual]", 
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "b", "d"},
+       {"c", "0", "b"},
+       {"f", "c", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"73ca545a-\
+785b-654e-92ca-bda52ae7798c"],
+
+Cell["\<\
+There are four independent real values, although six off-diagonal positions \
+are occupied.\
+\>", "Text",
+ CellChangeTimes->{
+  4.0003751396942196`*^9},ExpressionUUID->"f12408f9-4c27-774f-ad62-\
+5fa5561a17e8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "\"\<`*\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vars", "=", 
+   RowBox[{"{", 
+    RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"realAssumptions", "=", 
+   RowBox[{"vars", "\[Element]", 
+    TemplateBox[{},
+     "Reals"]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"nonzeroAssumptions", "=", 
+   RowBox[{"realAssumptions", "&&", 
+    RowBox[{"b", "\[NotEqual]", "0"}], "&&", 
+    RowBox[{"c", "\[NotEqual]", "0"}], "&&", 
+    RowBox[{"d", "\[NotEqual]", "0"}], "&&", 
+    RowBox[{"f", "\[NotEqual]", "0"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"j3", "=", 
+   RowBox[{"Reverse", "[", 
+    RowBox[{"IdentityMatrix", "[", "3", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"aMatrix", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "b", ",", "d"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"c", ",", "0", ",", "b"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"f", ",", "c", ",", "0"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"zero3", "=", 
+   RowBox[{"ConstantArray", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "3"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"checks", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"recordCheck", "[", 
+    RowBox[{"name_String", ",", "actual_", ",", "expected_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"passed", "=", 
+       RowBox[{"actual", "===", "expected"}]}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"checks", ",", 
+        RowBox[{"Association", "[", 
+         RowBox[{
+          RowBox[{"\"\<Check\>\"", "\[Rule]", "name"}], ",", 
+          RowBox[{"\"\<Passed\>\"", "\[Rule]", "passed"}], ",", 
+          RowBox[{"\"\<Actual\>\"", "\[Rule]", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"actual", ",", "InputForm"}], "]"}]}], ",", 
+          RowBox[{"\"\<Expected\>\"", "\[Rule]", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"expected", ",", "InputForm"}], "]"}]}]}], "]"}]}], "]"}],
+       ";", "\[IndentingNewLine]", "passed"}]}], "]"}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Check", " ", "a", " ", "result", " ", "against", " ", "its", " ", 
+    "expected", " ", "value", " ", "and", " ", "record", " ", "whether", " ", 
+    "it", " ", 
+    RowBox[{"passes", "."}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"zeroMatrixQ", "[", "m_List", "]"}], ":=", 
+   RowBox[{"And", "@@", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"TrueQ", "[", 
+        RowBox[{"#1", "\[Equal]", "0"}], "]"}], "&"}], ")"}], "/@", 
+     RowBox[{"Flatten", "[", "m", "]"}]}]}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Return", " ", "True", " ", "when", " ", "every", " ", "entry", " ", "of", 
+    " ", "a", " ", "matrix", " ", "is", " ", 
+    RowBox[{"zero", "."}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"monicChar", "[", 
+    RowBox[{"m_List", ",", "z_"}], "]"}], ":=", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"Det", "[", 
+     RowBox[{
+      RowBox[{"z", " ", 
+       RowBox[{"IdentityMatrix", "[", 
+        RowBox[{"Length", "[", "m", "]"}], "]"}]}], "-", "m"}], "]"}], 
+    "]"}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Compute", " ", "the", " ", "monic", " ", "characteristic", " ", 
+    "polynomial", " ", "det", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"x", " ", "I"}], " ", "-", " ", "A"}], ")"}], "."}]}], " ", 
+   "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"mat", "[", "v_List", "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       RowBox[{"v", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"v", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"v", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",",
+        "0", ",", 
+       RowBox[{"v", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}]}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"v", "\[LeftDoubleBracket]", "4", "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"v", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",",
+        "0"}], "}"}]}], "}"}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Build", " ", "the", " ", "persymmetric", " ", "matrix", " ", "from", " ", 
+    "the", " ", "values", " ", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", " ", "c", ",", " ", "d", ",", " ", "f"}], "}"}], 
+     "."}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"signText", "[", "v_List", "]"}], ":=", 
+   RowBox[{"StringJoin", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Switch", "[", 
+        RowBox[{
+         RowBox[{"Sign", "[", "#1", "]"}], ",", "1", ",", "\"\<+\>\"", ",", 
+         RowBox[{"-", "1"}], ",", "\"\<-\>\"", ",", "0", ",", "\"\<0\>\""}], 
+        "]"}], "&"}], ")"}], "/@", "v"}], "]"}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+     "Write", " ", "the", " ", "signs", " ", "as", " ", "a", " ", "string", " ",
+       "of"}], " ", "+"}], ",", " ", 
+    RowBox[{
+     RowBox[{"-", " ", "and"}], " ", "0."}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"supportText", "[", "v_List", "]"}], ":=", 
+   RowBox[{"StringJoin", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"#1", "\[Equal]", "0"}], ",", "\"\<0\>\"", 
+         ",", "\"\<*\>\""}], "]"}], "&"}], ")"}], "/@", "v"}], "]"}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Write", " ", "the", " ", 
+    RowBox[{"zero", "/", "nonzero"}], " ", "pattern", " ", "as", " ", "a", " ",
+     "string", " ", "of", " ", "0", " ", "and", " ", "*", "."}], " ", "*)"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"signConditions", "[", "v_List", "]"}], ":=", 
+   RowBox[{"And", "@@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Switch", "[", 
+        RowBox[{"#2", ",", "0", ",", 
+         RowBox[{"#1", "\[Equal]", "0"}], ",", "1", ",", 
+         RowBox[{"#1", ">", "0"}], ",", 
+         RowBox[{"-", "1"}], ",", 
+         RowBox[{"#1", "<", "0"}]}], "]"}], "&"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"vars", ",", "v"}], "}"}]}], "]"}]}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "Turn", " ", "a", " ", "sign", " ", "pattern", " ", "into", " ", 
+     "conditions", " ", "on", " ", "b"}], ",", " ", "c", ",", " ", 
+    RowBox[{"d", " ", "and", " ", 
+     RowBox[{"f", "."}]}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"supportConditions", "[", "v_List", "]"}], ":=", 
+   RowBox[{"And", "@@", 
+    RowBox[{"MapThread", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"#2", "\[Equal]", "0"}], ",", 
+         RowBox[{"#1", "\[Equal]", "0"}], ",", 
+         RowBox[{"#1", "\[NotEqual]", "0"}]}], "]"}], "&"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"vars", ",", "v"}], "}"}]}], "]"}]}]}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Require", " ", "each", " ", "value", " ", "to", " ", "be", " ", "zero", " ",
+     "or", " ", "nonzero", " ", "as", " ", 
+    RowBox[{"specified", "."}]}], " ", "*)"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Persymmetry\>\"", ",", 
+    RowBox[{"aMatrix", "\[Equal]", 
+     RowBox[{"j3", ".", 
+      TemplateBox[{"aMatrix"},
+       "Transpose"], ".", "j3"}]}], ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<A\>\"", 
+     RowBox[{"MatrixForm", "[", "aMatrix", "]"}]},
+    {"\"\<J\>\"", 
+     RowBox[{"MatrixForm", "[", "j3", "]"}]},
+    {"\"\<One fixed 0/* pattern\>\"", 
+     RowBox[{"MatrixForm", "[", RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"0", "\"\<*\>\"", "\"\<*\>\""},
+         {"\"\<*\>\"", "0", "\"\<*\>\""},
+         {"\"\<*\>\"", "\"\<*\>\"", "0"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.7]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}], "\[NoBreak]", ")"}], "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]}], "Input",
+ InitializationCell->True,
+ CellLabel->
+  "In[324]:=",ExpressionUUID->"9a1cf5dc-f9c1-ca49-8261-2feb8554f5b2"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"A\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "b", "d"}, {"c", "0", "b"}, {"f", "c", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"J\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "0", "1"}, {"0", "1", "0"}, {"1", "0", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"One fixed 0/* pattern\"\>", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "\<\"*\"\>", ",", "\<\"*\"\>"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"*\"\>", ",", "0", ",", "\<\"*\"\>"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\<\"*\"\>", ",", "\<\"*\"\>", ",", "0"}], "}"}]}], "}"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397045119495`*^9, 4.0004397542840023`*^9}, {
+  4.000439961405325*^9, 4.000439961509838*^9}, {4.000440018094412*^9, 
+  4.00044004209993*^9}},
+ CellLabel->
+  "Out[341]=",ExpressionUUID->"fb052450-d793-a141-bc9b-c85bd3d4cbef"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2. Multiply the matrix before using the theorem", "Section",ExpressionUUID->"47255f93-579b-2649-84f6-0074f367af24"],
+
+Cell["\<\
+For a 3 by 3 matrix, nilpotency is equivalent to A^3 = 0. The (1,1) entry of \
+A^2 is 0*0 + b*c + d*f = bc + df, and its (1,3) entry is 0*d + b*b + d*0 = \
+b^2.\
+\>", "Text",
+ CellChangeTimes->{
+  4.000375816124794*^9, {4.00037586862492*^9, 
+   4.0003758724176903`*^9}},ExpressionUUID->"2f69855e-4fa3-4243-a294-\
+d50800773259"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"aSquare", "=", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"aMatrix", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"aCube", "=", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"aMatrix", ",", "3"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p2", "=", 
+   RowBox[{
+    RowBox[{"2", " ", "b", " ", "c"}], "+", 
+    RowBox[{"d", " ", "f"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"q3", "=", 
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["b", "2"], " ", "f"}], "+", 
+    RowBox[{
+     SuperscriptBox["c", "2"], " ", "d"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"expectedSquare", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"b", " ", "c"}], "+", 
+        RowBox[{"d", " ", "f"}]}], ",", 
+       RowBox[{"c", " ", "d"}], ",", 
+       SuperscriptBox["b", "2"]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"b", " ", "f"}], ",", 
+       RowBox[{"2", " ", "b", " ", "c"}], ",", 
+       RowBox[{"c", " ", "d"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       SuperscriptBox["c", "2"], ",", 
+       RowBox[{"b", " ", "f"}], ",", 
+       RowBox[{
+        RowBox[{"b", " ", "c"}], "+", 
+        RowBox[{"d", " ", "f"}]}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Explicit square\>\"", ",", "aSquare", ",", "expectedSquare"}],
+    "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Cube equals p A + q I\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"aCube", "-", 
+      RowBox[{"p2", " ", "aMatrix"}], "-", 
+      RowBox[{"q3", " ", 
+       RowBox[{"IdentityMatrix", "[", "3", "]"}]}]}], "]"}], ",", "zero3"}], 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<A^2\>\"", 
+     RowBox[{"MatrixForm", "[", "aSquare", "]"}]},
+    {"\"\<A^3\>\"", 
+     RowBox[{"MatrixForm", "[", "aCube", "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[342]:=",ExpressionUUID->"4ff60440-b163-7a4d-a334-7571f0438139"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"A^2\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{RowBox[{RowBox[{"b", " ", "c"}], "+", RowBox[{"d", " ", "f"}]}], RowBox[{"c", " ", "d"}], SuperscriptBox["b", "2"]}, {RowBox[{"b", " ", "f"}], RowBox[{"2", " ", "b", " ", "c"}], RowBox[{"c", " ", "d"}]}, {SuperscriptBox["c", "2"], RowBox[{"b", " ", "f"}], RowBox[{RowBox[{"b", " ", "c"}], "+", RowBox[{"d", " ", "f"}]}]}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"A^3\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{RowBox[{RowBox[{SuperscriptBox["c", "2"], " ", "d"}], "+", RowBox[{SuperscriptBox["b", "2"], " ", "f"}]}], RowBox[{RowBox[{"2", " ", SuperscriptBox["b", "2"], " ", "c"}], "+", RowBox[{"b", " ", "d", " ", "f"}]}], RowBox[{RowBox[{"2", " ", "b", " ", "c", " ", "d"}], "+", RowBox[{SuperscriptBox["d", "2"], " ", "f"}]}]}, {RowBox[{RowBox[{"2", " ", "b", " ", SuperscriptBox["c", "2"]}], "+", RowBox[{"c", " ", "d", " ", "f"}]}], RowBox[{RowBox[{SuperscriptBox["c", "2"], " ", "d"}], "+", RowBox[{SuperscriptBox["b", "2"], " ", "f"}]}], RowBox[{RowBox[{"2", " ", SuperscriptBox["b", "2"], " ", "c"}], "+", RowBox[{"b", " ", "d", " ", "f"}]}]}, {RowBox[{RowBox[{"2", " ", "b", " ", "c", " ", "f"}], "+", RowBox[{"d", " ", SuperscriptBox["f", "2"]}]}], RowBox[{RowBox[{"2", " ", "b", " ", SuperscriptBox["c", "2"]}], "+", RowBox[{"c", " ", "d", " ", "f"}]}], RowBox[{RowBox[{SuperscriptBox["c", "2"], " ", "d"}], "+", RowBox[{SuperscriptBox["b", "2"], " ", "f"}]}]}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397110769367`*^9, 4.0004397543075104`*^9}, 
+   4.0004399615388412`*^9, {4.0004400182554283`*^9, 4.000440042156437*^9}},
+ CellLabel->
+  "Out[349]=",ExpressionUUID->"9b882225-93a1-2648-8952-62965cf5a940"]
+}, Open  ]],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"p", "\[LongEqual]", 
+    RowBox[{
+     RowBox[{"2", " ", "b", " ", "c"}], "+", 
+     RowBox[{"d", " ", "f"}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"e313519f-\
+f8b7-4c40-b1e5-2d0f2f2e8be3"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"q", "\[LongEqual]", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["b", "2"], " ", "f"}], "+", 
+     RowBox[{
+      SuperscriptBox["c", "2"], " ", "d"}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"e11599da-\
+1562-6f4e-b544-595dd065cfad"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"A", ",", "3"}], "]"}], "\[LongEqual]", 
+    RowBox[{
+     RowBox[{"p", " ", "A"}], "+", 
+     RowBox[{"q", " ", 
+      RowBox[{"IdentityMatrix", "[", "3", "]"}]}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"879916f4-\
+d82c-0540-9cd1-84e385cbed65"],
+
+Cell["\<\
+Every diagonal entry of A^3 is q. Every off-diagonal entry is the \
+corresponding entry of A multiplied by p. Thus A^3 = 0 forces q = 0; if A is \
+nonzero it also forces p = 0. For A = 0, both p and q already vanish. \
+Therefore the two scalar conditions below are necessary AND sufficient, \
+including cases where entries are zero.\
+\>", "Text",ExpressionUUID->"308e6c19-b3c6-b64c-ab3d-6dee89b070b5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"nilConditions", "=", 
+   RowBox[{
+    RowBox[{"p2", "\[Equal]", "0"}], "&&", 
+    RowBox[{"q3", "\[Equal]", "0"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cubeZeroConditions", "=", 
+   RowBox[{"And", "@@", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"#1", "\[Equal]", "0"}], "&"}], ")"}], "/@", 
+     RowBox[{"Flatten", "[", "aCube", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cubeEquivalence", "=", 
+   RowBox[{"Resolve", "[", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[ForAll]", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}]], 
+      RowBox[{"(", 
+       RowBox[{"cubeZeroConditions", "\[Equivalent]", "nilConditions"}], 
+       ")"}]}], ",", 
+     TemplateBox[{},
+      "Reals"]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Cube zero iff both scalar equations vanish\>\"", ",", 
+    "cubeEquivalence", ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"{", 
+  RowBox[{"nilConditions", ",", "cubeEquivalence"}], "}"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[350]:=",ExpressionUUID->"7d86ff14-5b97-0e49-8994-5ca7cb07fccc"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"2", " ", "b", " ", "c"}], "+", 
+      RowBox[{"d", " ", "f"}]}], "\[Equal]", "0"}], "&&", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["c", "2"], " ", "d"}], "+", 
+      RowBox[{
+       SuperscriptBox["b", "2"], " ", "f"}]}], "\[Equal]", "0"}]}], ",", 
+   "True"}], "}"}]], "Output",
+ CellChangeTimes->{{4.00043971109544*^9, 4.000439754330515*^9}, 
+   4.0004399617228584`*^9, {4.00044001827643*^9, 4.0004400421794376`*^9}},
+ CellLabel->
+  "Out[354]=",ExpressionUUID->"1822670a-f06c-3344-9e64-92b316a17464"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3. Characteristic polynomial and Cayley-Hamilton", "Section",ExpressionUUID->"0b89ab57-aae7-f540-aa3f-022fa926b84f"],
+
+Cell["\<\
+Nilpotency requires all three eigenvalues to be zero, so the characteristic \
+polynomial must be x^3. The coefficient of x^2 is already zero because the \
+diagonal is zero. The remaining two coefficients give exactly the equations \
+found by multiplication.\
+\>", "Text",
+ CellChangeTimes->{{4.0003771655851517`*^9, 
+  4.0003771915610123`*^9}},ExpressionUUID->"cd96fbd1-b36c-6041-bdaa-\
+9ebd53979f5d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"chi", "=", 
+   RowBox[{"Expand", "[", 
+    RowBox[{"monicChar", "[", 
+     RowBox[{"aMatrix", ",", "x"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Characteristic polynomial\>\"", ",", "chi", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{
+      SuperscriptBox["x", "3"], "-", 
+      RowBox[{"p2", " ", "x"}], "-", "q3"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Wolfram characteristic polynomial sign convention\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"-", 
+      RowBox[{"CharacteristicPolynomial", "[", 
+       RowBox[{"aMatrix", ",", "x"}], "]"}]}], "]"}], ",", "chi"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Trace is zero\>\"", ",", 
+    RowBox[{"Tr", "[", "aMatrix", "]"}], ",", "0"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Determinant is q\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Det", "[", "aMatrix", "]"}], "]"}], ",", "q3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Trace of square is 2p\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Tr", "[", "aSquare", "]"}], "]"}], ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"2", " ", "p2"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Trace of cube is 3q\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"Tr", "[", "aCube", "]"}], "]"}], ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"3", " ", "q3"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<Characteristic polynomial\>\"", "chi"},
+    {"\"\<Trace(A^2)\>\"", 
+     RowBox[{"Expand", "[", 
+      RowBox[{"Tr", "[", "aSquare", "]"}], "]"}]},
+    {"\"\<Trace(A^3)\>\"", 
+     RowBox[{"Expand", "[", 
+      RowBox[{"Tr", "[", "aCube", "]"}], "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[355]:=",ExpressionUUID->"9151e29d-1d25-7e47-b8c4-a359c482db13"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Characteristic polynomial\"\>", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", 
+        SuperscriptBox["c", "2"]}], " ", "d"}], "-", 
+      RowBox[{
+       SuperscriptBox["b", "2"], " ", "f"}], "-", 
+      RowBox[{"2", " ", "b", " ", "c", " ", "x"}], "-", 
+      RowBox[{"d", " ", "f", " ", "x"}], "+", 
+      SuperscriptBox["x", "3"]}]},
+    {"\<\"Trace(A^2)\"\>", 
+     RowBox[{
+      RowBox[{"4", " ", "b", " ", "c"}], "+", 
+      RowBox[{"2", " ", "d", " ", "f"}]}]},
+    {"\<\"Trace(A^3)\"\>", 
+     RowBox[{
+      RowBox[{"3", " ", 
+       SuperscriptBox["c", "2"], " ", "d"}], "+", 
+      RowBox[{"3", " ", 
+       SuperscriptBox["b", "2"], " ", "f"}]}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397111014404`*^9, 4.0004397543365116`*^9}, 
+   4.0004399617433643`*^9, {4.0004400182824306`*^9, 4.0004400421854362`*^9}},
+ CellLabel->
+  "Out[362]=",ExpressionUUID->"79d3aad0-5698-6a4d-a383-3c2c678f30db"]
+}, Open  ]],
+
+Cell["\<\
+Cayley-Hamilton replaces x^3 by A^3, -p x by -p A, and the constant -q by -q \
+I. It therefore gives A^3 - p A - q I = 0, consistent with our direct \
+multiplication. Zero trace by itself is insufficient: every matrix in this \
+family has zero trace, including many matrices that are not nilpotent.\
+\>", "Text",ExpressionUUID->"f99fa123-6352-b943-acb6-52bd372e3896"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"traceCounterexample", "=", 
+   RowBox[{"mat", "[", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "1", ",", "1", ",", "1"}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Zero trace counterexample is not nilpotent\>\"", ",", 
+    RowBox[{"zeroMatrixQ", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"traceCounterexample", ",", "3"}], "]"}], "]"}], ",", "False"}],
+    "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"MatrixForm", "[", "traceCounterexample", "]"}], ",", 
+   RowBox[{"monicChar", "[", 
+    RowBox[{"traceCounterexample", ",", "x"}], "]"}], ",", 
+   RowBox[{"MatrixForm", "[", RowBox[{"MatrixPower", "[", 
+     RowBox[{"traceCounterexample", ",", "3"}], "]"}], "]"}]}], "}"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[363]:=",ExpressionUUID->"f8b41e10-dfd5-1d44-bd17-96b1a7441575"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", "1"}, {"1", "0", "1"}, {"1", "1", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]], ",", 
+   RowBox[{
+    RowBox[{"-", "2"}], "-", 
+    RowBox[{"3", " ", "x"}], "+", 
+    SuperscriptBox["x", "3"]}], ",", 
+   TagBox[RowBox[{"(", "\:2060", GridBox[{{"2", "3", "3"}, {"3", "2", "3"}, {"3", "3", "2"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{{4.00043971110544*^9, 4.0004397543415127`*^9}, 
+   4.0004399617483654`*^9, {4.000440018285431*^9, 4.0004400421884365`*^9}},
+ CellLabel->
+  "Out[365]=",ExpressionUUID->"47bfb9dc-93cc-2342-9ffb-57cfd2a93992"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["4. Fully solve the case b,c,d,f all nonzero", "Section",ExpressionUUID->"11877ee0-e171-1748-b969-b7e9e3700e47"],
+
+Cell["\<\
+We can divide by b, c and d in this section because they are explicitly \
+nonzero. From b^2 f + c^2 d = 0, solve for f. Substituting that expression \
+into 2bc + df = 0 leaves one relation between b,c,d.\
+\>", "Text",ExpressionUUID->"9fd5ba42-42e6-c64f-86d0-005beb3d67cc"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"f", "\[LongEqual]", 
+    RowBox[{"-", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["c", "2"], " ", "d"}], 
+      SuperscriptBox["b", "2"]]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"3fd2662a-\
+264e-664f-99a6-8e82ac61a529"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"2", " ", "b", " ", "c"}], "-", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["c", "2"], " ", 
+       SuperscriptBox["d", "2"]}], 
+      SuperscriptBox["b", "2"]]}], "\[LongEqual]", "0"}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"8935399d-\
+9265-9c40-900b-899ca5eec2a0"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{"c", " ", 
+     SuperscriptBox["d", "2"]}], "\[LongEqual]", 
+    RowBox[{"2", " ", 
+     SuperscriptBox["b", "3"]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"5c5c3bef-\
+a057-5848-8366-f6629f345c14"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"eliminated", "=", 
+   RowBox[{"Factor", "[", 
+    RowBox[{"p2", "/.", "\[VeryThinSpace]", 
+     RowBox[{"f", "\[Rule]", 
+      RowBox[{"-", 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["c", "2"], " ", "d"}], 
+        SuperscriptBox["b", "2"]]}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Eliminated equation factors as expected\>\"", ",", 
+    RowBox[{"Together", "[", 
+     RowBox[{"eliminated", "-", 
+      FractionBox[
+       RowBox[{"c", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"2", " ", 
+           SuperscriptBox["b", "3"]}], "-", 
+          RowBox[{"c", " ", 
+           SuperscriptBox["d", "2"]}]}], ")"}]}], 
+       SuperscriptBox["b", "2"]]}], "]"}], ",", "0"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"{", 
+  RowBox[{"eliminated", ",", 
+   RowBox[{"Reduce", "[", 
+    RowBox[{
+     RowBox[{"nilConditions", "&&", 
+      RowBox[{
+       RowBox[{"b", " ", "c", " ", "d", " ", "f"}], "\[NotEqual]", "0"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"c", ",", "f"}], "}"}], ",", 
+     TemplateBox[{},
+      "Reals"]}], "]"}]}], "}"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[366]:=",ExpressionUUID->"09668386-d225-1a4b-ba25-974893f2f475"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   FractionBox[
+    RowBox[{"c", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", " ", 
+        SuperscriptBox["b", "3"]}], "-", 
+       RowBox[{"c", " ", 
+        SuperscriptBox["d", "2"]}]}], ")"}]}], 
+    SuperscriptBox["b", "2"]], ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"d", "<", "0"}], "&&", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"b", "<", "0"}], "&&", 
+            RowBox[{"c", "\[Equal]", 
+             FractionBox[
+              RowBox[{"2", " ", 
+               SuperscriptBox["b", "3"]}], 
+              SuperscriptBox["d", "2"]]}]}], ")"}], "||", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"b", ">", "0"}], "&&", 
+            RowBox[{"c", "\[Equal]", 
+             FractionBox[
+              RowBox[{"2", " ", 
+               SuperscriptBox["b", "3"]}], 
+              SuperscriptBox["d", "2"]]}]}], ")"}]}], ")"}]}], ")"}], "||", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"d", ">", "0"}], "&&", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"b", "<", "0"}], "&&", 
+            RowBox[{"c", "\[Equal]", 
+             FractionBox[
+              RowBox[{"2", " ", 
+               SuperscriptBox["b", "3"]}], 
+              SuperscriptBox["d", "2"]]}]}], ")"}], "||", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"b", ">", "0"}], "&&", 
+            RowBox[{"c", "\[Equal]", 
+             FractionBox[
+              RowBox[{"2", " ", 
+               SuperscriptBox["b", "3"]}], 
+              SuperscriptBox["d", "2"]]}]}], ")"}]}], ")"}]}], ")"}]}], ")"}],
+     "&&", 
+    RowBox[{"f", "\[Equal]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"2", " ", "b", " ", "c"}], "d"]}]}]}]}], "}"}]], "Output",
+ CellChangeTimes->{{4.0004397111244392`*^9, 4.000439754361511*^9}, 
+   4.0004399625009346`*^9, {4.0004400183054295`*^9, 4.0004400421954403`*^9}},
+ CellLabel->
+  "Out[368]=",ExpressionUUID->"f124940d-8817-6a4a-8fbf-4969925cbad6"]
+}, Open  ]],
+
+Cell["\<\
+Choose b and d freely, provided both are nonzero. Then c and f are uniquely \
+determined. This gives EVERY all-nonzero nilpotent matrix in the family, not \
+just some examples.\
+\>", "Text",ExpressionUUID->"5368a143-d5e9-4241-94bb-ee15d5fec757"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"c", "\[LongEqual]", 
+    FractionBox[
+     RowBox[{"2", " ", 
+      SuperscriptBox["b", "3"]}], 
+     SuperscriptBox["d", "2"]]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"6d52362c-\
+f37d-9041-8938-08373e6b5f6e"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"f", "\[LongEqual]", 
+    RowBox[{"-", 
+     FractionBox[
+      RowBox[{"4", " ", 
+       SuperscriptBox["b", "4"]}], 
+      SuperscriptBox["d", "3"]]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"8ead9227-\
+f141-244c-9a56-2cd45e939594"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"denseRules", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"c", "\[Rule]", 
+      FractionBox[
+       RowBox[{"2", " ", 
+        SuperscriptBox["b", "3"]}], 
+       SuperscriptBox["d", "2"]]}], ",", 
+     RowBox[{"f", "\[Rule]", 
+      RowBox[{"-", 
+       FractionBox[
+        RowBox[{"4", " ", 
+         SuperscriptBox["b", "4"]}], 
+        SuperscriptBox["d", "3"]]}]}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denseMatrix", "=", 
+   RowBox[{"aMatrix", "/.", "\[VeryThinSpace]", "denseRules"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denseAssumptions", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", "d"}], "}"}], "\[Element]", 
+     TemplateBox[{},
+      "Reals"]}], "&&", 
+    RowBox[{"b", "\[NotEqual]", "0"}], "&&", 
+    RowBox[{"d", "\[NotEqual]", "0"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denseFormulaConditions", "=", 
+   RowBox[{
+    RowBox[{"c", "\[Equal]", 
+     FractionBox[
+      RowBox[{"2", " ", 
+       SuperscriptBox["b", "3"]}], 
+      SuperscriptBox["d", "2"]]}], "&&", 
+    RowBox[{"f", "\[Equal]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"4", " ", 
+        SuperscriptBox["b", "4"]}], 
+       SuperscriptBox["d", "3"]]}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denseCompleteness", "=", 
+   RowBox[{"Resolve", "[", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[ForAll]", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}]], 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"b", " ", "c", " ", "d", " ", "f"}], "\[NotEqual]", "0"}], "\[Implies]", 
+        RowBox[{
+        "nilConditions", "\[Equivalent]", "denseFormulaConditions"}]}], 
+       ")"}]}], ",", 
+     TemplateBox[{},
+      "Reals"]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Dense parameterization is complete\>\"", ",", 
+    "denseCompleteness", ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Dense formula has zero cube\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"MatrixPower", "[", 
+       RowBox[{"denseMatrix", ",", "3"}], "]"}], ",", "denseAssumptions"}], 
+     "]"}], ",", "zero3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Dense formula has four nonzero values\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"And", "@@", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"#1", "\[NotEqual]", "0"}], "&"}], ")"}], "/@", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}], "/.", 
+          "\[VeryThinSpace]", "denseRules"}], ")"}]}]}], ",", 
+      "denseAssumptions"}], "]"}], ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"denseTuple", "[", 
+    RowBox[{"bb_", ",", "dd_"}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{"bb", ",", 
+     FractionBox[
+      RowBox[{"2", " ", 
+       SuperscriptBox["bb", "3"]}], 
+      SuperscriptBox["dd", "2"]], ",", "dd", ",", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"4", " ", 
+        SuperscriptBox["bb", "4"]}], 
+       SuperscriptBox["dd", "3"]]}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"MatrixForm", "[", "denseMatrix", "]"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[369]:=",ExpressionUUID->"7fd86458-1214-ae4c-8778-dfdd92f683e6"],
+
+Cell[BoxData[
+ TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "b", "d"}, {FractionBox[RowBox[{"2", " ", SuperscriptBox["b", "3"]}], SuperscriptBox["d", "2"]], "0", "b"}, {RowBox[{"-", FractionBox[RowBox[{"4", " ", SuperscriptBox["b", "4"]}], SuperscriptBox["d", "3"]]}], FractionBox[RowBox[{"2", " ", SuperscriptBox["b", "3"]}], SuperscriptBox["d", "2"]], "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{4.000439711145439*^9, 4.000439754379513*^9}, 
+   4.0004399626499596`*^9, {4.0004400183294296`*^9, 4.000440042215439*^9}},
+ CellLabel->
+  "Out[378]=",ExpressionUUID->"72e9d825-fcfb-3c4b-923d-3e7d0f834d1f"]
+}, Open  ]],
+
+Cell["\<\
+Two freely chosen values remain: b and d. This is a complete description over \
+the real numbers. Choosing rational b,d gives rational matrices; choosing \
+integers need not give integer c,f. \
+\>", "Text",
+ CellChangeTimes->{
+  4.0004383601257286`*^9},ExpressionUUID->"b3901e05-7ae0-364a-8b2c-\
+9421d19a6667"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5. Classify all 16 nonzero sign arrangements", "Section",ExpressionUUID->"66076486-1fab-c94a-8b1d-39d44bba26b6"],
+
+Cell["\<\
+Because d^2 is positive, c d^2 = 2b^3 forces c and b to have the same sign. \
+Because b^4 is positive, f = -4b^4/d^3 forces f and d to have opposite signs. \
+These restrictions are also sufficient: each allowed sign arrangement has an \
+explicit nilpotent witness.\
+\>", "Text",ExpressionUUID->"25d33041-7406-6b47-bd87-9681fb387872"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    TemplateBox[{"b"},
+     "Sign"], "\[LongEqual]", 
+    TemplateBox[{"c"},
+     "Sign"]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"8efdca7f-\
+63cb-0a44-b0f4-f5daa77cf535"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    TemplateBox[{"d"},
+     "Sign"], "\[LongEqual]", 
+    RowBox[{"-", 
+     TemplateBox[{"f"},
+      "Sign"]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"4d03fc91-\
+5727-a04d-a518-6507dd12023d"],
+
+Cell["\<\
+In all sign strings and tables, the order is (b,c,d,f). Thus ++-- means b,c \
+positive and d,f negative\
+\>", "Text",
+ CellChangeTimes->{
+  4.000438460388214*^9},ExpressionUUID->"a70cf94d-8b2e-ce45-b013-\
+c2bc5ef2cd77"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"denseSignTuples", "=", 
+   RowBox[{"Tuples", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", "4"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denseSignRows", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"possible", ",", "rule", ",", "witness"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"possible", "=", 
+         RowBox[{"Resolve", "[", 
+          RowBox[{
+           RowBox[{
+            SubscriptBox["\[Exists]", 
+             RowBox[{"{", 
+              RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}]], 
+            RowBox[{"(", 
+             RowBox[{"nilConditions", "&&", 
+              RowBox[{"signConditions", "[", "s", "]"}]}], ")"}]}], ",", 
+           TemplateBox[{},
+            "Reals"]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"rule", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+           "s", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "\[Equal]", 
+           RowBox[{
+           "s", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}]}], "&&", 
+          RowBox[{
+           RowBox[{
+           "s", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}], "\[Equal]", 
+           RowBox[{"-", 
+            RowBox[{
+            "s", "\[LeftDoubleBracket]", "4", 
+             "\[RightDoubleBracket]"}]}]}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"witness", "=", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"TrueQ", "[", "possible", "]"}], ",", 
+           RowBox[{"denseTuple", "[", 
+            RowBox[{
+             RowBox[{
+             "s", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+             RowBox[{
+             "s", "\[LeftDoubleBracket]", "3", "\[RightDoubleBracket]"}]}], 
+            "]"}], ",", "\"\<none\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Association", "[", 
+         RowBox[{
+          RowBox[{"\"\<Signs (b,c,d,f)\>\"", "\[Rule]", 
+           RowBox[{"signText", "[", "s", "]"}]}], ",", 
+          RowBox[{"\"\<Admits nilpotency\>\"", "\[Rule]", "possible"}], ",", 
+          RowBox[{"\"\<Simple sign rule\>\"", "\[Rule]", "rule"}], ",", 
+          RowBox[{"\"\<Witness tuple\>\"", "\[Rule]", "witness"}]}], 
+         "]"}]}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", "denseSignTuples"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<All 16 sign decisions agree with the rule\>\"", ",", 
+    RowBox[{"And", "@@", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#1", "[", "\"\<Admits nilpotency\>\"", "]"}], "===", 
+         RowBox[{"#1", "[", "\"\<Simple sign rule\>\"", "]"}]}], "&"}], ")"}],
+       "/@", "denseSignRows"}]}], ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Exactly four dense sign arrangements admit nilpotency\>\"", ",", 
+    RowBox[{"Count", "[", 
+     RowBox[{
+      RowBox[{"Lookup", "[", 
+       RowBox[{"denseSignRows", ",", "\"\<Admits nilpotency\>\""}], "]"}], ",",
+       "True"}], "]"}], ",", "4"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<All four dense sign witnesses have zero cube\>\"", ",", 
+    RowBox[{"And", "@@", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"zeroMatrixQ", "[", 
+         RowBox[{"MatrixPower", "[", 
+          RowBox[{
+           RowBox[{"mat", "[", 
+            RowBox[{"#1", "[", "\"\<Witness tuple\>\"", "]"}], "]"}], ",", 
+           "3"}], "]"}], "]"}], "&"}], ")"}], "/@", 
+      RowBox[{"Select", "[", 
+       RowBox[{"denseSignRows", ",", 
+        RowBox[{
+         RowBox[{"TrueQ", "[", 
+          RowBox[{"#1", "[", "\"\<Admits nilpotency\>\"", "]"}], "]"}], 
+         "&"}]}], "]"}]}]}], ",", "True"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Prepend", "[", 
+     RowBox[{
+      RowBox[{"Values", "/@", "denseSignRows"}], ",", 
+      RowBox[{"Keys", "[", 
+       RowBox[{"First", "[", "denseSignRows", "]"}], "]"}]}], "]"}], 
+    "\[LeftDoubleBracket]", 
+    RowBox[{"All", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "4"}], "}"}]}], 
+    "\[RightDoubleBracket]"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+   RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[379]:=",ExpressionUUID->"f2bc953a-17a4-9640-aa3b-d494d74bb043"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Signs (b,c,d,f)\"\>", "\<\"Admits nilpotency\"\>", "\<\"Witness tuple\"\>"},
+    {"\<\"----\"\>", "False", "\<\"none\"\>"},
+    {"\<\"---+\"\>", "True", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", 
+       RowBox[{"-", "2"}], ",", 
+       RowBox[{"-", "1"}], ",", "4"}], "}"}]},
+    {"\<\"--+-\"\>", "True", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", 
+       RowBox[{"-", "2"}], ",", "1", ",", 
+       RowBox[{"-", "4"}]}], "}"}]},
+    {"\<\"--++\"\>", "False", "\<\"none\"\>"},
+    {"\<\"-+--\"\>", "False", "\<\"none\"\>"},
+    {"\<\"-+-+\"\>", "False", "\<\"none\"\>"},
+    {"\<\"-++-\"\>", "False", "\<\"none\"\>"},
+    {"\<\"-+++\"\>", "False", "\<\"none\"\>"},
+    {"\<\"+---\"\>", "False", "\<\"none\"\>"},
+    {"\<\"+--+\"\>", "False", "\<\"none\"\>"},
+    {"\<\"+-+-\"\>", "False", "\<\"none\"\>"},
+    {"\<\"+-++\"\>", "False", "\<\"none\"\>"},
+    {"\<\"++--\"\>", "False", "\<\"none\"\>"},
+    {"\<\"++-+\"\>", "True", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", 
+       RowBox[{"-", "1"}], ",", "4"}], "}"}]},
+    {"\<\"+++-\"\>", "True", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "1", ",", 
+       RowBox[{"-", "4"}]}], "}"}]},
+    {"\<\"++++\"\>", "False", "\<\"none\"\>"}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellLabel->"Out[8]=",ExpressionUUID->"a80e5982-8c7a-7743-8a43-7053edc0303f"]
+}, Open  ]],
+
+Cell["\<\
+The four admissible strings are +++-, ++-+, --+-, and ---+. There is no \
+relationship between the sign of b and the sign of d. These are EXISTENCE \
+statements. Suitable signs do not make arbitrary magnitudes nilpotent.\
+\>", "Text",ExpressionUUID->"f5a42b53-48da-0f4b-9fc3-0e5597ead075"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"fourWitnesses", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"mat", "[", 
+        RowBox[{"{", 
+         RowBox[{"s", ",", 
+          RowBox[{"2", " ", "s"}], ",", "t", ",", 
+          RowBox[{
+           RowBox[{"-", "4"}], " ", "t"}]}], "}"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"s", ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}]}], "]"}], ",", 
+     "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{"Prepend", "[", 
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"signText", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"m", "\[LeftDoubleBracket]", 
+             RowBox[{"1", ",", "2"}], "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"m", "\[LeftDoubleBracket]", 
+             RowBox[{"2", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"m", "\[LeftDoubleBracket]", 
+             RowBox[{"1", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+            RowBox[{"m", "\[LeftDoubleBracket]", 
+             RowBox[{"3", ",", "1"}], "\[RightDoubleBracket]"}]}], "}"}], 
+          "]"}], ",", 
+         RowBox[{"MatrixForm", "[", "m", "]"}], ",", 
+         RowBox[{"zeroMatrixQ", "[", 
+          RowBox[{"MatrixPower", "[", 
+           RowBox[{"m", ",", "3"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "fourWitnesses"}], "}"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Signs\>\"", ",", "\"\<Witness\>\"", 
+       ",", "\"\<A^3 = 0\>\""}], "}"}]}], "]"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+   RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[384]:=",ExpressionUUID->"3ed1a031-01a3-f646-979d-62d3db78964a"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Signs\"\>", "\<\"Witness\"\>", "\<\"A^3 = 0\"\>"},
+    {"\<\"---+\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", RowBox[{"-", "1"}], RowBox[{"-", "1"}]}, {RowBox[{"-", "2"}], "0", RowBox[{"-", "1"}]}, {"4", RowBox[{"-", "2"}], "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]], "True"},
+    {"\<\"--+-\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", RowBox[{"-", "1"}], "1"}, {RowBox[{"-", "2"}], "0", RowBox[{"-", "1"}]}, {RowBox[{"-", "4"}], RowBox[{"-", "2"}], "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]], "True"},
+    {"\<\"++-+\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", RowBox[{"-", "1"}]}, {"2", "0", "1"}, {"4", "2", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]], "True"},
+    {"\<\"+++-\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", "1"}, {"2", "0", "1"}, {RowBox[{"-", "4"}], "2", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]], "True"}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397112329483`*^9, 4.000439754444027*^9}, 
+   4.000439962742464*^9, {4.0004400183963833`*^9, 4.0004400422799454`*^9}},
+ CellLabel->
+  "Out[385]=",ExpressionUUID->"bad1f961-5e26-864e-bb53-2d747c489c96"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["6. Worked examples: cancellation and its failure", "Section",ExpressionUUID->"138c4db4-e572-c44e-a724-d32f420b9958"],
+
+Cell["\<\
+Start with b=1,c=2,d=1,f=-4. The first cancellation is 2*(1)*(2) + (1)*(-4) = \
+4-4 = 0. The second is (1)^2*(-4) + (2)^2*(1) = -4+4 = 0. The following cell \
+displays the matrix, its square and its cube separately.\
+\>", "Text",ExpressionUUID->"6b31bf2b-739c-5f40-8d85-b38092539153"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"canonicalN", "=", 
+   RowBox[{"mat", "[", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "1", ",", 
+      RowBox[{"-", "4"}]}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Canonical example square\>\"", ",", 
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"canonicalN", ",", "2"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "2"}], ",", "2", ",", "1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "4"}], ",", "4", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"4", ",", 
+        RowBox[{"-", "4"}], ",", 
+        RowBox[{"-", "2"}]}], "}"}]}], "}"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Canonical example has nonzero square\>\"", ",", 
+    RowBox[{"zeroMatrixQ", "[", 
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"canonicalN", ",", "2"}], "]"}], "]"}], ",", "False"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Canonical example has zero cube\>\"", ",", 
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"canonicalN", ",", "3"}], "]"}], ",", "zero3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<N\>\"", 
+     RowBox[{"MatrixForm", "[", "canonicalN", "]"}]},
+    {"\"\<N^2\>\"", 
+     RowBox[{"MatrixForm", "[", RowBox[{"MatrixPower", "[", 
+       RowBox[{"canonicalN", ",", "2"}], "]"}], "]"}]},
+    {"\"\<N^3\>\"", 
+     RowBox[{"MatrixForm", "[", RowBox[{"MatrixPower", "[", 
+       RowBox[{"canonicalN", ",", "3"}], "]"}], "]"}]},
+    {"\"\<Characteristic polynomial\>\"", 
+     RowBox[{"monicChar", "[", 
+      RowBox[{"canonicalN", ",", "x"}], "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellChangeTimes->{{4.0004396959429817`*^9, 4.0004396959914875`*^9}, {
+  4.0004397373529606`*^9, 4.0004397374830627`*^9}, {4.0004400026700726`*^9, 
+  4.000440039789421*^9}},
+ CellLabel->
+  "In[386]:=",ExpressionUUID->"153373b7-2fde-4645-9cb1-c5f1f227c64c"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"N\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", "1"}, {"2", "0", "1"}, {RowBox[{"-", "4"}], "2", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"N^2\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{RowBox[{"-", "2"}], "2", "1"}, {RowBox[{"-", "4"}], "4", "2"}, {"4", RowBox[{"-", "4"}], RowBox[{"-", "2"}]}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"N^3\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "0", "0"}, {"0", "0", "0"}, {"0", "0", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"Characteristic polynomial\"\>", 
+     SuperscriptBox["x", "3"]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397045659523`*^9, 4.000439754449028*^9}, 
+   4.0004399627484665`*^9, 4.0004400422849483`*^9},
+ CellLabel->
+  "Out[390]=",ExpressionUUID->"15a34f9d-eb5a-5842-8a2a-3f202c1e0600"]
+}, Open  ]],
+
+Cell["\<\
+Now change only f from -4 to -3. The zero positions, persymmetry and every \
+entry sign are preserved. However, both cancellation totals become 1. Its \
+characteristic polynomial is x^3-x-1 and its cube is A+I, not zero. This \
+proves that the dense 0/* pattern does not force nilpotency.\
+\>", "Text",ExpressionUUID->"f8398587-f40d-af4d-83de-986ff42e452b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"perturbedN", "=", 
+   RowBox[{"mat", "[", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "1", ",", 
+      RowBox[{"-", "3"}]}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Perturbation preserves signs\>\"", ",", 
+    RowBox[{"Sign", "[", "perturbedN", "]"}], ",", 
+    RowBox[{"Sign", "[", "canonicalN", "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Perturbation polynomial\>\"", ",", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"monicChar", "[", 
+      RowBox[{"perturbedN", ",", "x"}], "]"}], "]"}], ",", 
+    RowBox[{
+     SuperscriptBox["x", "3"], "-", "x", "-", "1"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Perturbation cube\>\"", ",", 
+    RowBox[{"MatrixPower", "[", 
+     RowBox[{"perturbedN", ",", "3"}], "]"}], ",", 
+    RowBox[{"perturbedN", "+", 
+     RowBox[{"IdentityMatrix", "[", "3", "]"}]}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<Perturbed matrix\>\"", 
+     RowBox[{"MatrixForm", "[", "perturbedN", "]"}]},
+    {"\"\<Its cube\>\"", 
+     RowBox[{"MatrixForm", "[", RowBox[{"MatrixPower", "[", 
+       RowBox[{"perturbedN", ",", "3"}], "]"}], "]"}]},
+    {"\"\<Its characteristic polynomial\>\"", 
+     RowBox[{"monicChar", "[", 
+      RowBox[{"perturbedN", ",", "x"}], "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[391]:=",ExpressionUUID->"aeb04e95-7efc-0043-b18f-3b09c66eeb3b"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Perturbed matrix\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", "1"}, {"2", "0", "1"}, {RowBox[{"-", "3"}], "2", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"Its cube\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"1", "1", "1"}, {"2", "1", "1"}, {RowBox[{"-", "3"}], "2", "1"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"Its characteristic polynomial\"\>", 
+     RowBox[{
+      RowBox[{"-", "1"}], "-", "x", "+", 
+      SuperscriptBox["x", "3"]}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.000439711257948*^9, 4.000439754454029*^9}, 
+   4.0004399627554665`*^9, {4.000440018437397*^9, 4.0004400423069477`*^9}},
+ CellLabel->
+  "Out[395]=",ExpressionUUID->"8b734ae4-90cc-a346-aa72-b1c28cb9ac92"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"exampleTuples", "=", 
+   RowBox[{"denseTuple", "@@@", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        FractionBox["1", "2"]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{"-", "1"}]}], "}"}]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{"Prepend", "[", 
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"Join", "[", 
+        RowBox[{"v", ",", 
+         RowBox[{"{", 
+          RowBox[{"zeroMatrixQ", "[", 
+           RowBox[{"MatrixPower", "[", 
+            RowBox[{
+             RowBox[{"mat", "[", "v", "]"}], ",", "3"}], "]"}], "]"}], 
+          "}"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"v", ",", "exampleTuples"}], "}"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<b\>\"", ",", "\"\<c\>\"", ",", "\"\<d\>\"", 
+       ",", "\"\<f\>\"", ",", "\"\<Nilpotent\>\""}], "}"}]}], "]"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}]}], "]"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[396]:=",ExpressionUUID->"b7f214d7-c799-4841-9ada-8fb402884f1d"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"b\"\>", "\<\"c\"\>", "\<\"d\"\>", "\<\"f\"\>", "\<\"Nilpotent\"\>"},
+    {"1", "2", "1", 
+     RowBox[{"-", "4"}], "True"},
+    {"1", 
+     FractionBox["1", "2"], "2", 
+     RowBox[{"-", 
+      FractionBox["1", "2"]}], "True"},
+    {"1", "8", 
+     FractionBox["1", "2"], 
+     RowBox[{"-", "32"}], "True"},
+    {
+     RowBox[{"-", "1"}], 
+     RowBox[{"-", "2"}], "1", 
+     RowBox[{"-", "4"}], "True"},
+    {"2", "16", 
+     RowBox[{"-", "1"}], "64", "True"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.000439711264948*^9, 4.000439754473028*^9}, 
+   4.0004399627744675`*^9, {4.0004400184433975`*^9, 4.0004400423109474`*^9}},
+ CellLabel->
+  "Out[397]=",ExpressionUUID->"1b72d45b-4ef1-2541-be3f-ca18b94a37ae"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+7. Rank, nilpotency index, minimal polynomial and Jordan form\
+\>", "Section",ExpressionUUID->"1f8dd62d-bd9f-e047-9398-7a2dc3caae75"],
+
+Cell["\<\
+Every all-nonzero nilpotent matrix in this family has index THREE. The (1,3) \
+entry of A^2 is b^2, so A^2 cannot be zero when b is nonzero. We already \
+proved A^3=0. The minor in rows 1,2 and columns 2,3 is b^2, so rank(A) is at \
+least two; det(A)=0 makes its rank exactly two. Its square has rank one.\
+\>", "Text",ExpressionUUID->"9ba1d139-3e8a-9c45-81b6-be8b2a3b868e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"denseSquare", "=", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"MatrixPower", "[", 
+      RowBox[{"denseMatrix", ",", "2"}], "]"}], ",", "denseAssumptions"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"rankMinor", "=", 
+   RowBox[{"Det", "[", 
+    RowBox[{"aMatrix", "\[LeftDoubleBracket]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", "2"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}]}], "\[RightDoubleBracket]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Rank-two minor\>\"", ",", "rankMinor", ",", 
+    SuperscriptBox["b", "2"]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Square is nonzero in dense case\>\"", ",", 
+    RowBox[{"denseSquare", "\[LeftDoubleBracket]", 
+     RowBox[{"1", ",", "3"}], "\[RightDoubleBracket]"}], ",", 
+    SuperscriptBox["b", "2"]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Dense matrix generic exact rank\>\"", ",", 
+    RowBox[{"MatrixRank", "[", "denseMatrix", "]"}], ",", "2"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Dense square generic exact rank\>\"", ",", 
+    RowBox[{"MatrixRank", "[", "denseSquare", "]"}], ",", "1"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<Minor proving rank at least 2\>\"", "rankMinor"},
+    {"\"\<A^2 (1,3) entry\>\"", 
+     RowBox[{"denseSquare", "\[LeftDoubleBracket]", 
+      RowBox[{"1", ",", "3"}], "\[RightDoubleBracket]"}]},
+    {"\"\<Rank(A)\>\"", 
+     RowBox[{"MatrixRank", "[", "denseMatrix", "]"}]},
+    {"\"\<Rank(A^2)\>\"", 
+     RowBox[{"MatrixRank", "[", "denseSquare", "]"}]},
+    {"\"\<Minimal polynomial\>\"", 
+     SuperscriptBox["x", "3"]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[398]:=",ExpressionUUID->"48e99226-2e9b-074b-b6fb-db102346d7eb"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Minor proving rank at least 2\"\>", 
+     SuperscriptBox["b", "2"]},
+    {"\<\"A^2 (1,3) entry\"\>", 
+     SuperscriptBox["b", "2"]},
+    {"\<\"Rank(A)\"\>", "2"},
+    {"\<\"Rank(A^2)\"\>", "1"},
+    {"\<\"Minimal polynomial\"\>", 
+     SuperscriptBox["x", "3"]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.000439711284954*^9, 4.0004397544790306`*^9}, 
+   4.000439962796467*^9, {4.0004400184639015`*^9, 4.000440042316946*^9}},
+ CellLabel->
+  "Out[404]=",ExpressionUUID->"404d0d68-71b0-a44b-ba63-fe9d7d0aa7b1"]
+}, Open  ]],
+
+Cell["\<\
+The minimal polynomial is x^3: x^3 annihilates A, but x and x^2 do not. A \
+nonzero nilpotent matrix cannot be diagonalizable, because a diagonal matrix \
+whose eigenvalues are all zero is itself zero. Here there is a single Jordan \
+block of size three.\
+\>", "Text",ExpressionUUID->"2d17f8c9-b30f-8e4c-ac08-ce9ec8b7c038"],
+
+Cell["\<\
+A concrete Jordan basis avoids treating Jordan form as a black box. Let \
+u=(0,0,1)^T. The three columns A^2u, Au, u form a basis: their determinant is \
+-b^3. In that basis A sends the first column to 0, the second to the first, \
+and the third to the second.\
+\>", "Text",ExpressionUUID->"c46e4fbf-94ab-2344-bd69-578667928f6e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"unit3", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"jordanBasis", "=", 
+   TemplateBox[{
+     RowBox[{"{", 
+       RowBox[{
+         RowBox[{"denseSquare", ".", "unit3"}], ",", 
+         RowBox[{"denseMatrix", ".", "unit3"}], ",", "unit3"}], "}"}]},
+    "Transpose"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"upperShift", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Jordan basis determinant\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"Det", "[", "jordanBasis", "]"}], ",", "denseAssumptions"}], 
+     "]"}], ",", 
+    RowBox[{"-", 
+     SuperscriptBox["b", "3"]}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Explicit Jordan-chain identity\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"denseMatrix", ".", "jordanBasis"}], "-", 
+       RowBox[{"jordanBasis", ".", "upperShift"}]}], ",", 
+      "denseAssumptions"}], "]"}], ",", "zero3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Similarity to the upper shift\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       TemplateBox[{"jordanBasis"},
+        "Inverse"], ".", "denseMatrix", ".", "jordanBasis"}], ",", 
+      "denseAssumptions"}], "]"}], ",", "upperShift"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<Basis matrix P\>\"", 
+     RowBox[{"MatrixForm", "[", "jordanBasis", "]"}]},
+    {"\"\<det(P)\>\"", 
+     RowBox[{"FullSimplify", "[", 
+      RowBox[{
+       RowBox[{"Det", "[", "jordanBasis", "]"}], ",", "denseAssumptions"}], 
+      "]"}]},
+    {"\"\<P^-1 A P\>\"", 
+     RowBox[{"MatrixForm", "[", "upperShift", "]"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[405]:=",ExpressionUUID->"e3bb5d60-61ca-eb45-b430-e9270e883190"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Basis matrix P\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{SuperscriptBox["b", "2"], "d", "0"}, {FractionBox[RowBox[{"2", " ", SuperscriptBox["b", "3"]}], "d"], "b", "0"}, {RowBox[{"-", FractionBox[RowBox[{"2", " ", SuperscriptBox["b", "4"]}], SuperscriptBox["d", "2"]]}], "0", "1"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"det(P)\"\>", 
+     RowBox[{"-", 
+      SuperscriptBox["b", "3"]}]},
+    {"\<\"P^-1 A P\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", "1", "0"}, {"0", "0", "1"}, {"0", "0", "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.000439711293461*^9, 4.000439754500536*^9}, 
+   4.0004399628214684`*^9, {4.0004400184709015`*^9, 4.0004400423419495`*^9}},
+ CellLabel->
+  "Out[411]=",ExpressionUUID->"54f2932f-b141-0a48-bafa-6297b6337641"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["8. All dense solutions share one canonical construction", "Section",ExpressionUUID->"28e33cf5-08fb-6e45-b058-db12330619a2"],
+
+Cell["\<\
+The two-parameter formula has another interpretation. Start with N from \
+section 6, multiply it by a nonzero scalar k, and apply diagonal similarity \
+using D=diag(r,1,1/r), where r is nonzero. This preserves nilpotency. The \
+special form of D also preserves persymmetry.\
+\>", "Text",ExpressionUUID->"3ad29f9c-6fd3-284e-9ae6-5001f517e418"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"D", "\[LongEqual]", 
+    RowBox[{"DiagonalMatrix", "[", 
+     RowBox[{"{", 
+      RowBox[{"r", ",", "1", ",", 
+       FractionBox["1", "r"]}], "}"}], "]"}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"5a989ee8-\
+b02b-d345-8ce7-f08112a0d000"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{"A", "\[LongEqual]", 
+    RowBox[{"k", " ", 
+     RowBox[{"D", ".", "N", ".", 
+      TemplateBox[{"D"},
+       "Inverse"]}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",ExpressionUUID->"d69fbebc-\
+22d9-ef4f-bb1b-13c282d55a59"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"diagonalD", "=", 
+   RowBox[{"DiagonalMatrix", "[", 
+    RowBox[{"{", 
+     RowBox[{"r", ",", "1", ",", 
+      FractionBox["1", "r"]}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"scaledCanonical", "=", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"k", " ", 
+      RowBox[{"diagonalD", ".", "canonicalN", ".", 
+       TemplateBox[{"diagonalD"},
+        "Inverse"]}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"k", ",", "r"}], "}"}], "\[Element]", 
+       TemplateBox[{},
+        "Reals"]}], "&&", 
+      RowBox[{"k", "\[NotEqual]", "0"}], "&&", 
+      RowBox[{"r", "\[NotEqual]", "0"}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<D preserves reversal form\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       TemplateBox[{"diagonalD"},
+        "Transpose"], ".", "j3", ".", "diagonalD"}], ",", 
+      RowBox[{"r", "\[NotEqual]", "0"}]}], "]"}], ",", "j3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Scaled construction is persymmetric\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"scaledCanonical", "-", 
+       RowBox[{"j3", ".", 
+        TemplateBox[{"scaledCanonical"},
+         "Transpose"], ".", "j3"}]}], ",", 
+      RowBox[{"r", "\[NotEqual]", "0"}]}], "]"}], ",", "zero3"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Scaled construction recovers every dense solution\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"scaledCanonical", "/.", "\[VeryThinSpace]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"k", "\[Rule]", 
+            FractionBox[
+             SuperscriptBox["b", "2"], "d"]}], ",", 
+           RowBox[{"r", "\[Rule]", 
+            FractionBox["d", "b"]}]}], "}"}]}], ")"}], "-", "denseMatrix"}], ",",
+       "denseAssumptions"}], "]"}], ",", "zero3"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ TagBox[GridBox[{
+    {"\"\<k D N D^-1\>\"", 
+     RowBox[{"MatrixForm", "[", "scaledCanonical", "]"}]},
+    {"\"\<Choose k\>\"", 
+     FractionBox[
+      SuperscriptBox["b", "2"], "d"]},
+    {"\"\<Choose r\>\"", 
+     FractionBox["d", "b"]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[412]:=",ExpressionUUID->"7d578b0b-629c-0542-9cf7-f2f175fd8d45"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"k D N D^-1\"\>", 
+     TagBox[RowBox[{"(", "\:2060", GridBox[{{"0", RowBox[{"k", " ", "r"}], RowBox[{"k", " ", SuperscriptBox["r", "2"]}]}, {FractionBox[RowBox[{"2", " ", "k"}], "r"], "0", RowBox[{"k", " ", "r"}]}, {RowBox[{"-", FractionBox[RowBox[{"4", " ", "k"}], SuperscriptBox["r", "2"]]}], FractionBox[RowBox[{"2", " ", "k"}], "r"], "0"}}, RowSpacings -> 1, ColumnSpacings -> 1, RowAlignments -> Baseline, ColumnAlignments -> Center], "\:2060", ")"}], Function[BoxForm`e$, MatrixForm[BoxForm`e$]]]},
+    {"\<\"Choose k\"\>", 
+     FractionBox[
+      SuperscriptBox["b", "2"], "d"]},
+    {"\<\"Choose r\"\>", 
+     FractionBox["d", "b"]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{1}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.0004397113204613`*^9, 4.000439754524536*^9}, 
+   4.0004399628499756`*^9, {4.0004400184949017`*^9, 4.0004400423644543`*^9}},
+ CellLabel->
+  "Out[417]=",ExpressionUUID->"289d11f9-34a5-464f-a4f2-37e2b482337f"]
+}, Open  ]],
+
+Cell["\<\
+Thus every dense nilpotent solution is obtained from one N by scaling and \
+this special diagonal similarity. Arbitrary diagonal similarities need not \
+preserve persymmetry, so the form of D matters. A positive or negative r and \
+k produce the four admissible sign arrangements. These equivalences are also \
+a warning for ML: many apparently different examples may be transformed \
+versions of the same construction.\
+\>", "Text",ExpressionUUID->"efb6339a-c417-6849-8ff9-38dbf3968f29"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9. The graph explains which products cancel", "Section",ExpressionUUID->"92aeffc4-e60f-0246-bdbd-0722e882020b"],
+
+Cell["\<\
+Interpret a nonzero entry a_ij as a directed edge i -> j weighted by a_ij. In \
+the dense case all six directed off-diagonal edges exist. A matrix power sums \
+the products of edge weights along walks. Positive and negative products can \
+therefore cancel even though the graph contains cycles.\
+\>", "Text",ExpressionUUID->"6d653ecd-90ac-4d40-a90c-f907c530086c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cycleRows", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<1 -> 2 -> 1\>\"", ",", 
+       RowBox[{"b", " ", "c"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<2 -> 3 -> 2\>\"", ",", 
+       RowBox[{"b", " ", "c"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<1 -> 3 -> 1\>\"", ",", 
+       RowBox[{"d", " ", "f"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<1 -> 2 -> 3 -> 1\>\"", ",", 
+       RowBox[{
+        SuperscriptBox["b", "2"], " ", "f"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<1 -> 3 -> 2 -> 1\>\"", ",", 
+       RowBox[{
+        SuperscriptBox["c", "2"], " ", "d"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{
+   RowBox[{"Prepend", "[", 
+    RowBox[{"cycleRows", ",", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Directed cycle\>\"", ",", "\"\<Weight product\>\""}], 
+      "}"}]}], "]"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+   RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[418]:=",ExpressionUUID->"f489e69c-afa3-b144-85d1-85d8369e111d"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Directed cycle\"\>", "\<\"Weight product\"\>"},
+    {"\<\"1 -> 2 -> 1\"\>", 
+     RowBox[{"b", " ", "c"}]},
+    {"\<\"2 -> 3 -> 2\"\>", 
+     RowBox[{"b", " ", "c"}]},
+    {"\<\"1 -> 3 -> 1\"\>", 
+     RowBox[{"d", " ", "f"}]},
+    {"\<\"1 -> 2 -> 3 -> 1\"\>", 
+     RowBox[{
+      SuperscriptBox["b", "2"], " ", "f"}]},
+    {"\<\"1 -> 3 -> 2 -> 1\"\>", 
+     RowBox[{
+      SuperscriptBox["c", "2"], " ", "d"}]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{4.000439711338461*^9, 4.0004397545295353`*^9}, 
+   4.0004399628739758`*^9, {4.000440018514902*^9, 4.0004400423834553`*^9}},
+ CellLabel->
+  "Out[419]=",ExpressionUUID->"0da9c913-baae-9b4d-9acb-496846584d14"]
+}, Open  ]],
+
+Cell["\<\
+The three directed 2-cycles have total weight 2bc+df. The two directed \
+3-cycles, counted once each up to cyclic rotation, have total weight \
+b^2f+c^2d. Dense nilpotency means both totals cancel. The two bc products are \
+positive, the df product is negative, and df=-2bc. The two 3-cycle products \
+have opposite signs and equal magnitudes.\
+\>", "Text",ExpressionUUID->"6f59c78b-4475-704c-ae45-79f496adfedc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ratioAssumptions", "=", 
+   RowBox[{"nonzeroAssumptions", "&&", "nilConditions"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Two-cycle cancellation ratio\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"d", " ", "f"}], 
+        RowBox[{"b", " ", "c"}]], "/.", "\[VeryThinSpace]", "denseRules"}], ",",
+       "denseAssumptions"}], "]"}], ",", 
+    RowBox[{"-", "2"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Three-cycle cancellation ratio\>\"", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["b", "2"], " ", "f"}], 
+        RowBox[{
+         SuperscriptBox["c", "2"], " ", "d"}]], "/.", "\[VeryThinSpace]", 
+       "denseRules"}], ",", "denseAssumptions"}], "]"}], ",", 
+    RowBox[{"-", "1"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"d", " ", "f"}], 
+       RowBox[{"b", " ", "c"}]], "/.", "\[VeryThinSpace]", "denseRules"}], ",",
+      "denseAssumptions"}], "]"}], ",", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["b", "2"], " ", "f"}], 
+       RowBox[{
+        SuperscriptBox["c", "2"], " ", "d"}]], "/.", "\[VeryThinSpace]", 
+      "denseRules"}], ",", "denseAssumptions"}], "]"}]}], "}"}]}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[420]:=",ExpressionUUID->"fb5441ea-9a85-aa45-affd-2823715479a4"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "2"}], ",", 
+   RowBox[{"-", "1"}]}], "}"}]], "Output",
+ CellChangeTimes->{{4.0004397113424625`*^9, 4.0004397545495358`*^9}, 
+   4.000439962895977*^9, {4.000440018518902*^9, 4.000440042387457*^9}},
+ CellLabel->
+  "Out[423]=",ExpressionUUID->"1c912464-08d9-af47-a7e8-989b3063f85d"]
+}, Open  ]],
+
+Cell["\<\
+No dense entrywise nonnegative or nonpositive matrix is nilpotent: bc and df \
+would both be positive. No nonzero real symmetric matrix in this \
+zero-diagonal family is nilpotent either. Symmetry would require c=b and f=d, \
+reducing the first equation to 2b^2+d^2=0, which forces b=d=0.\
+\>", "Text",ExpressionUUID->"73d272d5-6c40-4644-bf2d-cca8ec8c3862"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"symmetricConditions", "=", 
+   RowBox[{"nilConditions", "&&", 
+    RowBox[{"c", "\[Equal]", "b"}], "&&", 
+    RowBox[{"f", "\[Equal]", "d"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"symmetricNilSolution", "=", 
+   RowBox[{"Reduce", "[", 
+    RowBox[{"symmetricConditions", ",", "vars", ",", 
+     TemplateBox[{},
+      "Reals"]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"recordCheck", "[", 
+   RowBox[{"\"\<Only symmetric nilpotent solution is zero\>\"", ",", 
+    RowBox[{"Resolve", "[", 
+     RowBox[{
+      RowBox[{
+       SubscriptBox["\[ForAll]", 
+        RowBox[{"{", 
+         RowBox[{"b", ",", "c", ",", "d", ",", "f"}], "}"}]], 
+       RowBox[{"(", 
+        RowBox[{"symmetricConditions", "\[Equivalent]", 
+         RowBox[{
+          RowBox[{"b", "\[Equal]", "0"}], "&&", 
+          RowBox[{"c", "\[Equal]", "0"}], "&&", 
+          RowBox[{"d", "\[Equal]", "0"}], "&&", 
+          RowBox[{"f", "\[Equal]", "0"}]}]}], ")"}]}], ",", 
+      TemplateBox[{},
+       "Reals"]}], "]"}], ",", "True"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", "symmetricNilSolution"}], "Input",
+ InitializationCell->False,
+ CellLabel->
+  "In[424]:=",ExpressionUUID->"d1e0510d-9b8c-ec40-afcc-3e1fb51e9dd2"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"b", "\[Equal]", "0"}], "&&", 
+  RowBox[{"c", "\[Equal]", "0"}], "&&", 
+  RowBox[{"d", "\[Equal]", "0"}], "&&", 
+  RowBox[{"f", "\[Equal]", "0"}]}]], "Output",
+ CellChangeTimes->{{4.0004397113634605`*^9, 4.000439754569538*^9}, 
+   4.0004399629229774`*^9, {4.000440018538908*^9, 4.0004400424104557`*^9}},
+ CellLabel->
+  "Out[427]=",ExpressionUUID->"48574ca8-7ce4-dc4d-b36c-7e58da0f0b22"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1908, 1005.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowTitle->"Complete zero-diagonal persymmetric 3 x 3 nilpotency",
+TaggingRules-><|
+ "Scope" -> "Real zero-diagonal persymmetric 3 x 3 nilpotency", "BuildDate" -> 
+  "2026-10-07", "ExactVerification" -> True|>,
+CellContext->Notebook,
+ShowCellLabel->True,
+Magnification->1.1,
+FrontEndVersion->"15.0 for Microsoft Windows (64-bit) (July 2, 2026)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"9f1c9f5e-87bb-5041-a823-5136a199d252"
+]
+(* End of Notebook Content *)
